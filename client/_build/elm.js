@@ -11266,6 +11266,7 @@ Elm.Presentation.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var translateX = function (i) {    return A2($Basics._op["++"],"translateX(",A2($Basics._op["++"],$Basics.toString(i),"vw)"));};
    var renderSlide = F2(function (i,slide) {
       return A2($Html.article,
       _U.list([$Html$Attributes.$class("slide")
@@ -11278,7 +11279,7 @@ Elm.Presentation.make = function (_elm) {
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "position",_1: "absolute"}
-                                              ,{ctor: "_Tuple2",_0: "left",_1: A2($Basics._op["++"],$Basics.toString($Basics.negate(model.slide * 100)),"vw")}
+                                              ,{ctor: "_Tuple2",_0: "transform",_1: translateX($Basics.negate(model.slide * 100))}
                                               ,{ctor: "_Tuple2",_0: "height",_1: "100vh"}]))]),
       A2($Basics._op["++"],
       A2($List.indexedMap,renderSlide,slides),
@@ -11316,6 +11317,7 @@ Elm.Presentation.make = function (_elm) {
                                      ,actions: actions
                                      ,init: init
                                      ,renderSlide: renderSlide
+                                     ,translateX: translateX
                                      ,view: view
                                      ,model: model
                                      ,main: main};

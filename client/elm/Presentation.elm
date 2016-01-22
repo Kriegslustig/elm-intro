@@ -86,16 +86,19 @@ renderSlide i slide =
       [ fromElement <| Markdown.toElement slide.content ]
     ]
 
+translateX : Int -> String
+translateX i =
+  "translateX(" ++ toString i ++ "vw)"
+
 view : Address Action -> Model -> Html
 view address model =
   div
     [ style
         [ ("position", "absolute")
-        , ("left"
-          , ( toString
+        , ("transform"
+          , translateX
               <| negate
               <| model.slide * 100
-            ) ++ "vw"
           )
         , ("height", "100vh")
         ]
