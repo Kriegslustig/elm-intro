@@ -11379,37 +11379,3 @@ Elm.Presentation.make = function (_elm) {
                                      ,app: app
                                      ,main: main};
 };
-Elm.Test1 = Elm.Test1 || {};
-Elm.Test1.make = function (_elm) {
-   "use strict";
-   _elm.Test1 = _elm.Test1 || {};
-   if (_elm.Test1.values) return _elm.Test1.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var main = A2($Html.p,_U.list([]),_U.list([$Html.text("Test1.0")]));
-   return _elm.Test1.values = {_op: _op,main: main};
-};
-Elm.Test2 = Elm.Test2 || {};
-Elm.Test2.make = function (_elm) {
-   "use strict";
-   _elm.Test2 = _elm.Test2 || {};
-   if (_elm.Test2.values) return _elm.Test2.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var main = A2($Html.p,_U.list([]),_U.list([$Html.text("Test2")]));
-   return _elm.Test2.values = {_op: _op,main: main};
-};
