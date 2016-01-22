@@ -11249,6 +11249,45 @@ Elm.Markdown.make = function (_elm) {
                                  ,toHtmlWith: toHtmlWith
                                  ,toElementWith: toElementWith};
 };
+Elm.StartApp = Elm.StartApp || {};
+Elm.StartApp.make = function (_elm) {
+   "use strict";
+   _elm.StartApp = _elm.StartApp || {};
+   if (_elm.StartApp.values) return _elm.StartApp.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Task = Elm.Task.make(_elm);
+   var _op = {};
+   var start = function (config) {
+      var updateStep = F2(function (action,_p0) {
+         var _p1 = _p0;
+         var _p2 = A2(config.update,action,_p1._0);
+         var newModel = _p2._0;
+         var additionalEffects = _p2._1;
+         return {ctor: "_Tuple2",_0: newModel,_1: $Effects.batch(_U.list([_p1._1,additionalEffects]))};
+      });
+      var update = F2(function (actions,_p3) {    var _p4 = _p3;return A3($List.foldl,updateStep,{ctor: "_Tuple2",_0: _p4._0,_1: $Effects.none},actions);});
+      var messages = $Signal.mailbox(_U.list([]));
+      var singleton = function (action) {    return _U.list([action]);};
+      var address = A2($Signal.forwardTo,messages.address,singleton);
+      var inputs = $Signal.mergeMany(A2($List._op["::"],messages.signal,A2($List.map,$Signal.map(singleton),config.inputs)));
+      var effectsAndModel = A3($Signal.foldp,update,config.init,inputs);
+      var model = A2($Signal.map,$Basics.fst,effectsAndModel);
+      return {html: A2($Signal.map,config.view(address),model)
+             ,model: model
+             ,tasks: A2($Signal.map,function (_p5) {    return A2($Effects.toTask,messages.address,$Basics.snd(_p5));},effectsAndModel)};
+   };
+   var App = F3(function (a,b,c) {    return {html: a,model: b,tasks: c};});
+   var Config = F4(function (a,b,c,d) {    return {init: a,update: b,view: c,inputs: d};});
+   return _elm.StartApp.values = {_op: _op,start: start,Config: Config,App: App};
+};
 Elm.Presentation = Elm.Presentation || {};
 Elm.Presentation.make = function (_elm) {
    "use strict";
@@ -11257,69 +11296,87 @@ Elm.Presentation.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Http = Elm.Http.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
    $Keyboard = Elm.Keyboard.make(_elm),
    $List = Elm.List.make(_elm),
    $Markdown = Elm.Markdown.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
+   $Signal = Elm.Signal.make(_elm),
+   $StartApp = Elm.StartApp.make(_elm),
+   $Task = Elm.Task.make(_elm);
    var _op = {};
    var translateX = function (i) {    return A2($Basics._op["++"],"translateX(",A2($Basics._op["++"],$Basics.toString(i),"vw)"));};
    var renderSlide = F2(function (i,slide) {
       return A2($Html.article,
       _U.list([$Html$Attributes.$class("slide")
-              ,$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100vw"},{ctor: "_Tuple2",_0: "height",_1: "100vh"}]))]),
+              ,$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100vw"}
+                                              ,{ctor: "_Tuple2",_0: "height",_1: "100vh"}
+                                              ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}]))]),
       _U.list([A2($Html.h1,_U.list([]),_U.list([$Html.text(slide.title)]))
               ,A2($Html.div,_U.list([]),_U.list([$Html.fromElement($Markdown.toElement(slide.content))]))]));
    });
-   var init = {slide: 0};
-   var slides = _U.list([{title: "A first slide",content: "## yolo"}]);
    var view = F2(function (address,model) {
       return A2($Html.div,
-      _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "position",_1: "absolute"}
-                                              ,{ctor: "_Tuple2",_0: "transform",_1: translateX($Basics.negate(model.slide * 100))}
-                                              ,{ctor: "_Tuple2",_0: "height",_1: "100vh"}]))]),
-      A2($Basics._op["++"],
-      A2($List.indexedMap,renderSlide,slides),
-      _U.list([A2($Html.p,
-      _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "position",_1: "fixed"}
-                                              ,{ctor: "_Tuple2",_0: "bottom",_1: "0"}
-                                              ,{ctor: "_Tuple2",_0: "left",_1: "0"}]))]),
-      _U.list([$Html.text($Basics.toString(model.slide))]))])));
+      _U.list([]),
+      _U.list([A2($Html.div,
+              _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "position",_1: "absolute"}
+                                                      ,{ctor: "_Tuple2",_0: "white-space",_1: "nowrap"}
+                                                      ,{ctor: "_Tuple2",_0: "transform",_1: translateX($Basics.negate(model.slide * 100))}
+                                                      ,{ctor: "_Tuple2",_0: "height",_1: "100vh"}]))]),
+              A2($List.indexedMap,renderSlide,model.slides))
+              ,A2($Html.p,
+              _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "position",_1: "fixed"}
+                                                      ,{ctor: "_Tuple2",_0: "bottom",_1: "0"}
+                                                      ,{ctor: "_Tuple2",_0: "left",_1: "0"}]))]),
+              _U.list([$Html.text($Basics.toString(model.slide))]))]));
    });
    var update = F2(function (action,model) {
       var _p0 = action;
       switch (_p0.ctor)
-      {case "NoOp": return model;
-         case "NextSlide": return _U.update(model,{slide: model.slide + 1});
-         default: return _U.update(model,{slide: model.slide - 1});}
+      {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
+         case "NextSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: model.slide + 1}),_1: $Effects.none};
+         case "PrevSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: model.slide - 1}),_1: $Effects.none};
+         default: return {ctor: "_Tuple2"
+                         ,_0: _U.update(model,{slides: A2($Basics._op["++"],model.slides,A2($Maybe.withDefault,_U.list([]),_p0._0))})
+                         ,_1: $Effects.none};}
    });
+   var AddSlides = function (a) {    return {ctor: "AddSlides",_0: a};};
    var NextSlide = {ctor: "NextSlide"};
    var PrevSlide = {ctor: "PrevSlide"};
    var NoOp = {ctor: "NoOp"};
    var keySignal = A2($Signal.map,function (key) {    return _U.eq(key,39) ? NextSlide : _U.eq(key,37) ? PrevSlide : NoOp;},$Keyboard.presses);
-   var actions = $Signal.mailbox(NoOp);
-   var model = A3($Signal.foldp,update,init,A2($Signal.merge,actions.signal,keySignal));
-   var main = A2($Signal.map,view(actions.address),model);
    var Slide = F2(function (a,b) {    return {title: a,content: b};});
-   var Model = function (a) {    return {slide: a};};
+   var slidesDecoder = $Json$Decode.list(A3($Json$Decode.object2,
+   Slide,
+   A2($Json$Decode._op[":="],"title",$Json$Decode.string),
+   A2($Json$Decode._op[":="],"content",$Json$Decode.string)));
+   var getSlides = function (url) {    return $Effects.task(A2($Task.map,AddSlides,$Task.toMaybe(A2($Http.get,slidesDecoder,url))));};
+   var init = {ctor: "_Tuple2",_0: {slide: 0,slides: _U.list([])},_1: getSlides("/slides")};
+   var app = $StartApp.start({init: init,view: view,update: update,inputs: _U.list([keySignal])});
+   var main = app.html;
+   var tasks = Elm.Native.Task.make(_elm).performSignal("tasks",app.tasks);
+   var Model = F2(function (a,b) {    return {slide: a,slides: b};});
    return _elm.Presentation.values = {_op: _op
                                      ,Model: Model
                                      ,Slide: Slide
                                      ,NoOp: NoOp
                                      ,PrevSlide: PrevSlide
                                      ,NextSlide: NextSlide
+                                     ,AddSlides: AddSlides
                                      ,update: update
-                                     ,slides: slides
+                                     ,getSlides: getSlides
+                                     ,slidesDecoder: slidesDecoder
                                      ,keySignal: keySignal
-                                     ,actions: actions
-                                     ,init: init
                                      ,renderSlide: renderSlide
                                      ,translateX: translateX
+                                     ,init: init
                                      ,view: view
-                                     ,model: model
+                                     ,app: app
                                      ,main: main};
 };
 Elm.Test1 = Elm.Test1 || {};
