@@ -12,6 +12,10 @@ module.exports = grunt => {
     elm: [
       [ 'client/elm/**/*.elm' ],
       'client/_build/elm.js'
+    ],
+    js: [
+      [ 'client/js/**/*.js' ],
+      'client/_build/bundle.js'
     ]
   }
 
@@ -24,6 +28,10 @@ module.exports = grunt => {
       elm: {
         files: files.elm[0],
         tasks: ['elm']
+      },
+      js: {
+        files: files.js[0],
+        tasks: ['babel']
       }
     },
     pkg: grunt.file.readJSON('package.json'),
@@ -42,20 +50,26 @@ module.exports = grunt => {
     },
 
     elm: {
-      compil: {
+      compile: {
         files: {
           [ files.elm[1] ]: files.elm[0]
         }
       }
+    },
+
+    babel: {
+      options: { presets: ['babel-preset-es2015'] },
+      dist: { files: { [ files.js[1] ]: files.js[0] } }
     }
 
   })
 
   grunt.loadNpmTasks('grunt-postcss')
   grunt.loadNpmTasks('grunt-elm')
+  grunt.loadNpmTasks('grunt-babel')
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['postcss', 'elm', 'watch'])
-  grunt.registerTask('build', ['postcss', 'elm'])
+  grunt.registerTask('default', ['postcss', 'elm', 'babel', 'watch'])
+  grunt.registerTask('build', ['postcss', 'elm', 'babel'])
 }
 

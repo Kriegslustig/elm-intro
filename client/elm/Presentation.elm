@@ -2,6 +2,7 @@ module Presentation where
 
 import Signal exposing (Address, map, merge)
 import Keyboard
+import Maybe exposing (Maybe(Just, Nothing))
 import List exposing ((::))
 import Html exposing (Html, div, h1, article, fromElement, text, p)
 import Html.Attributes exposing (style, class)
@@ -155,4 +156,15 @@ main =
 port tasks : Signal (Task Effects.Never ())
 port tasks =
   app.tasks
+
+port newSlides : Signal Int
+port newSlides =
+  Signal.filterMap
+    (\model ->
+      if List.length model.slides > 0
+        then Just 1
+      else Nothing
+    )
+    0
+    app.model
 
