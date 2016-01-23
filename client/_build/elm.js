@@ -11305,35 +11305,12 @@ Elm.HackerNews.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Task = Elm.Task.make(_elm);
    var _op = {};
-   var decodeNewsList = $Json$Decode.list($Json$Decode.$int);
-   var decodeNewsArticle = A2($Json$Decode._op[":="],"title",$Json$Decode.string);
-   var baseUrl = "https://hacker-news.firebaseio.com/v0/";
-   var getArticle = function (id) {
-      return A2($Task.onError,
-      A2($Http.get,decodeNewsArticle,A2($Basics._op["++"],baseUrl,A2($Basics._op["++"],"item/",A2($Basics._op["++"],$Basics.toString(id),".json")))),
-      function (err) {
-         return $Task.succeed("");
-      });
-   };
-   var getNewsTask = A2($Task.andThen,
-   A2($Http.get,decodeNewsList,A2($Basics._op["++"],baseUrl,"topstories.json")),
-   function (_p0) {
-      return $Task.sequence(A2($List.map,getArticle,_p0));
-   });
+   var decodeNewsList = $Json$Decode.list($Json$Decode.string);
+   var getNewsTask = A2($Http.get,decodeNewsList,"/hnposts");
    var getNews = function (a) {
-      return $Effects.task(A2($Task.map,
-      function (res) {
-         return a(A2($Result.withDefault,_U.list([]),A2($Debug.log,"res",res)));
-      },
-      $Task.toResult(getNewsTask)));
+      return $Effects.task(A2($Task.map,function (res) {    return a(A2($Result.withDefault,_U.list([]),res));},$Task.toResult(getNewsTask)));
    };
-   return _elm.HackerNews.values = {_op: _op
-                                   ,baseUrl: baseUrl
-                                   ,getNews: getNews
-                                   ,getNewsTask: getNewsTask
-                                   ,getArticle: getArticle
-                                   ,decodeNewsArticle: decodeNewsArticle
-                                   ,decodeNewsList: decodeNewsList};
+   return _elm.HackerNews.values = {_op: _op,getNews: getNews,getNewsTask: getNewsTask,decodeNewsList: decodeNewsList};
 };
 Elm.Presentation = Elm.Presentation || {};
 Elm.Presentation.make = function (_elm) {

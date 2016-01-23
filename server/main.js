@@ -28,7 +28,7 @@ module.exports = (app, prefix) => {
   })
   router.get('/hnposts', function *() {
     yield co(() => new Promise((res, rej) => {
-      fs.readFile(`${__dirname}/../common/index.html`, { encoding: 'utf8' }, (err, data) => {
+      fs.readFile(`${__dirname}/../common/data/hnposts.json`, { encoding: 'utf8' }, (err, data) => {
         if(err) return rej(err)
         this.status = 200
         this.body = data
