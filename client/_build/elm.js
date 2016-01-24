@@ -11325,7 +11325,6 @@ Elm.Presentation.make = function (_elm) {
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $Http = Elm.Http.make(_elm),
    $Json$Decode = Elm.Json.Decode.make(_elm),
-   $Keyboard = Elm.Keyboard.make(_elm),
    $List = Elm.List.make(_elm),
    $Markdown = Elm.Markdown.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
@@ -11335,21 +11334,32 @@ Elm.Presentation.make = function (_elm) {
    $Task = Elm.Task.make(_elm);
    var _op = {};
    var translateX = function (i) {    return A2($Basics._op["++"],"translateX(",A2($Basics._op["++"],$Basics.toString(i),"vw)"));};
+   var keyDown = Elm.Native.Port.make(_elm).inboundSignal("keyDown",
+   "Int",
+   function (v) {
+      return typeof v === "number" && isFinite(v) && Math.floor(v) === v ? v : _U.badPort("an integer",v);
+   });
    var update = F2(function (action,model) {
       var _p0 = action;
       switch (_p0.ctor)
       {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
          case "NextSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: model.slide + 1}),_1: $Effects.none};
          case "PrevSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: model.slide - 1}),_1: $Effects.none};
-         default: return {ctor: "_Tuple2"
-                         ,_0: _U.update(model,{slides: A2($Basics._op["++"],model.slides,A2($Maybe.withDefault,_U.list([]),_p0._0))})
-                         ,_1: $Effects.none};}
+         case "AddSlides": return {ctor: "_Tuple2"
+                                  ,_0: _U.update(model,{slides: A2($Basics._op["++"],model.slides,A2($Maybe.withDefault,_U.list([]),_p0._0))})
+                                  ,_1: $Effects.none};
+         default: return {ctor: "_Tuple2",_0: _U.update(model,{showNotes: $Basics.not(model.showNotes)}),_1: $Effects.none};}
    });
    var AddSlides = function (a) {    return {ctor: "AddSlides",_0: a};};
+   var ToggleNotes = {ctor: "ToggleNotes"};
    var NextSlide = {ctor: "NextSlide"};
    var PrevSlide = {ctor: "PrevSlide"};
    var NoOp = {ctor: "NoOp"};
-   var keySignal = A2($Signal.map,function (key) {    return _U.eq(key,39) ? NextSlide : _U.eq(key,37) ? PrevSlide : NoOp;},$Keyboard.presses);
+   var keySignal = A2($Signal.map,
+   function (key) {
+      return _U.eq(key,39) ? NextSlide : _U.eq(key,37) ? PrevSlide : _U.eq(key,78) ? ToggleNotes : NoOp;
+   },
+   keyDown);
    var Slide = F3(function (a,b,c) {    return {title: a,content: b,notes: c};});
    var slidesDecoder = $Json$Decode.list(A4($Json$Decode.object3,
    Slide,
@@ -11357,22 +11367,23 @@ Elm.Presentation.make = function (_elm) {
    A2($Json$Decode._op[":="],"content",$Json$Decode.string),
    A2($Json$Decode._op[":="],"notes",$Json$Decode.string)));
    var getSlides = function (url) {    return $Effects.task(A2($Task.map,AddSlides,$Task.toMaybe(A2($Http.get,slidesDecoder,url))));};
-   var init = {ctor: "_Tuple2",_0: {slide: 0,slides: _U.list([])},_1: getSlides("/slides")};
-   var Model = F2(function (a,b) {    return {slide: a,slides: b};});
+   var init = {ctor: "_Tuple2",_0: {slide: 0,slides: _U.list([]),showNotes: false},_1: getSlides("/slides")};
+   var Model = F3(function (a,b,c) {    return {slide: a,slides: b,showNotes: c};});
    _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
-   var renderSlide = function (slide) {
+   var renderSlide = F2(function (notes,slide) {
       return A2($Html.article,
       _U.list([$Html$Attributes.$class("slide")
               ,$Html$Attributes.style(_U.list([A2(_op["=>"],"width","100vw")
                                               ,A2(_op["=>"],"height","100vh")
                                               ,A2(_op["=>"],"display","inline-block")
-                                              ,A2(_op["=>"],"vertical-align","top")]))]),
-      _U.list([A2($Html.h1,_U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"white-space","initial")]))]),_U.list([$Html.text(slide.title)]))
+                                              ,A2(_op["=>"],"vertical-align","top")
+                                              ,A2(_op["=>"],"white-space","normal")]))]),
+      _U.list([A2($Html.h1,_U.list([]),_U.list([$Html.text(slide.title)]))
               ,A2($Html.div,_U.list([$Html$Attributes.$class("slide__content")]),_U.list([$Html.fromElement($Markdown.toElement(slide.content))]))
               ,A2($Html.div,
-              _U.list([$Html$Attributes.$class("slide__notes"),$Html$Attributes.style(_U.list([A2(_op["=>"],"display","none")]))]),
+              _U.list([$Html$Attributes.$class("slide__notes"),$Html$Attributes.style(_U.list([A2(_op["=>"],"display",notes ? "block" : "none")]))]),
               _U.list([$Html.fromElement($Markdown.toElement(slide.notes))]))]));
-   };
+   });
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([]),
@@ -11381,7 +11392,7 @@ Elm.Presentation.make = function (_elm) {
                                                       ,A2(_op["=>"],"white-space","nowrap")
                                                       ,A2(_op["=>"],"transform",translateX($Basics.negate(model.slide * 100)))
                                                       ,A2(_op["=>"],"height","100vh")]))]),
-              A2($List.map,renderSlide,model.slides))
+              A2($List.map,renderSlide(model.showNotes),model.slides))
               ,A2($Html.p,
               _U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"position","fixed"),A2(_op["=>"],"bottom","0"),A2(_op["=>"],"left","0")]))]),
               _U.list([$Html.text($Basics.toString(model.slide))]))]));
@@ -11400,6 +11411,7 @@ Elm.Presentation.make = function (_elm) {
                                      ,NoOp: NoOp
                                      ,PrevSlide: PrevSlide
                                      ,NextSlide: NextSlide
+                                     ,ToggleNotes: ToggleNotes
                                      ,AddSlides: AddSlides
                                      ,update: update
                                      ,getSlides: getSlides

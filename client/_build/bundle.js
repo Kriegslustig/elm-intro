@@ -6,7 +6,12 @@ var mapElems = function mapElems(className, cb) {
   return [].map.call(document.getElementsByClassName(className), cb);
 };
 
-var presentation = Elm.fullscreen(Elm.Presentation);(function (_) {
+var presentation = Elm.fullscreen(Elm.Presentation, { keyDown: 0 });
+
+window.addEventListener('keydown', function (e) {
+  presentation.ports.keyDown.send(e.keyCode);
+  e.preventDefault();
+});(function (_) {
   var ran = false;
   presentation.ports.newSlides.subscribe(function (slides) {
     if (ran) return;

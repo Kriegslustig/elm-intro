@@ -8,8 +8,12 @@ const mapElems = (className, cb) => [].map
     cb
   )
 
+const presentation = Elm.fullscreen(Elm.Presentation, { keyDown: 0 })
 
-const presentation = Elm.fullscreen(Elm.Presentation)
+window.addEventListener('keydown', e => {
+  presentation.ports.keyDown.send(e.keyCode)
+  e.preventDefault()
+})
 
 ;(_ => {
   let ran = false
