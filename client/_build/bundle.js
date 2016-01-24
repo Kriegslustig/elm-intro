@@ -9,6 +9,7 @@ var mapElems = function mapElems(className, cb) {
 var presentation = Elm.fullscreen(Elm.Presentation, { keyDown: 0 });
 
 window.addEventListener('keydown', function (e) {
+  if (e.target.tagName === 'INPUT' || e.metaKey === true) return;
   presentation.ports.keyDown.send(e.keyCode);
   e.preventDefault();
 });(function (_) {
