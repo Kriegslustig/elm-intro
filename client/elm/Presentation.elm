@@ -36,6 +36,7 @@ type Action = NoOp
   | PrevSlide
   | NextSlide
   | ToggleNotes
+  | SetSlide Int
   | AddSlides (Maybe (List Slide))
 
 update : Action -> Model -> (Model, Effects Action)
@@ -58,6 +59,13 @@ update action model =
           slide = model.slide-1
         }
       , setSlideHash <| model.slide-1
+      )
+
+    SetSlide slide ->
+      ( { model |
+          slide = slide
+        }
+      , Effects.none
       )
 
     AddSlides maybeSlides ->
@@ -99,6 +107,7 @@ slidesDecoder =
       ("notes" := Json.Decode.string)
 
 port keyDown : Signal Int
+port initHashSignal : String
 
 keySignal : Signal Action
 keySignal =
@@ -113,6 +122,18 @@ keySignal =
         else NoOp
     )
     keyDown
+
+parseHash : String -> Int
+parseHash =
+  Result.withDefault 0
+  << String.toInt
+  << String.dropLeft 1
+
+hashSignal : Signal Action
+hashSignal =
+  map
+    (SetSlide << parseHash)
+    History.hash
 
 renderSlide : Bool -> Slide -> Html
 renderSlide notes slide =
@@ -149,7 +170,7 @@ translateX i =
 
 init : (Model, Effects Action)
 init =
-  ( { slide = 0
+  ( { slide = parseHash initHashSignal
     , slides = []
     , showNotes = False
     }
@@ -186,7 +207,7 @@ app =
     { init = init
     , view = view
     , update = update
-    , inputs = [keySignal]
+    , inputs = [hashSignal, keySignal]
     }
 
 main : Signal Html

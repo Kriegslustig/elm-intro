@@ -8,7 +8,13 @@ const mapElems = (className, cb) => [].map
     cb
   )
 
-const presentation = Elm.fullscreen(Elm.Presentation, { keyDown: 0 })
+const presentation = Elm.fullscreen(
+  Elm.Presentation,
+  {
+    keyDown: 0,
+    initHashSignal: location.hash
+  }
+)
 
 window.addEventListener('keydown', e => {
   if(
