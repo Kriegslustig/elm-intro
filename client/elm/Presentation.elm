@@ -14,6 +14,8 @@ import Json.Decode exposing ((:=))
 import Task exposing (Task)
 import StartApp
 
+(=>) = (,)
+
 type alias Model =
   { slide : Int
   , slides : List Slide
@@ -22,6 +24,7 @@ type alias Model =
 type alias Slide =
   { title : String
   , content : String
+  , notes : String
   }
 
 type Action = NoOp
@@ -68,9 +71,10 @@ getSlides url =
 slidesDecoder : Json.Decode.Decoder (List Slide)
 slidesDecoder =
   Json.Decode.list
-    <| Json.Decode.object2 Slide
+    <| Json.Decode.object3 Slide
       ("title" := Json.Decode.string)
       ("content" := Json.Decode.string)
+      ("notes" := Json.Decode.string)
 
 keySignal : Signal Action
 keySignal =
@@ -84,22 +88,28 @@ keySignal =
     )
     Keyboard.presses
 
-renderSlide : Int -> Slide -> Html
-renderSlide i slide =
+renderSlide : Slide -> Html
+renderSlide slide =
   article
     [ class "slide"
     , style
-      [ ("width", "100vw")
-      , ("height", "100vh")
-      , ("display", "inline-block")
+      [ "width" => "100vw"
+      , "height" => "100vh"
+      , "display" => "inline-block"
+      , "vertical-align" => "top"
       ]
     ]
     [ h1
       []
       [ text slide.title ]
     , div
-      []
+      [ class "slide__content" ]
       [ fromElement <| Markdown.toElement slide.content ]
+    , div
+      [ class "slide__notes"
+      , style [ "display" => "none" ]
+      ]
+      [ fromElement <| Markdown.toElement slide.notes ]
     ]
 
 translateX : Int -> String
@@ -130,7 +140,7 @@ view address model =
           , ("height", "100vh")
           ]
       ]
-      <| List.indexedMap renderSlide model.slides
+      <| List.map renderSlide model.slides
     , p
       [ style
         [ ("position", "fixed")

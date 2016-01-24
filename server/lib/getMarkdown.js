@@ -13,10 +13,11 @@ module.exports = pattern => {
         (file, next) => {
           fs.readFile(file, { encoding: 'utf8' }, (err, data) => {
             if(err) next(err)
-            const res = /^# (.*)([^]*)/gm.exec(data) || []
+            const res = /^# (.*)([^]+)?(<notes>([^]+)<\/notes>)?/gm.exec(data) || []
             next(null, {
               content: res[2],
-              title: res[1] // The regex narrow implementation that only works well for showdown
+              title: res[1],
+              notes: res[4] || ""
             })
           })
         },

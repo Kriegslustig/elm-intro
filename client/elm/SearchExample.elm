@@ -3,7 +3,7 @@ module SearchExample where
 import Signal
 import String exposing (contains, toLower)
 import Html exposing (..)
-import Html.Attributes exposing (type')
+import Html.Attributes exposing (type', style)
 import Html.Events exposing (on, targetValue)
 import Http
 import Effects exposing (Effects, none)
@@ -41,6 +41,7 @@ update action model =
     NewInput input ->
       ( { model |
           inList = input
+        , output = input
         }
       , none
       )
@@ -55,9 +56,8 @@ view address model =
         <| \query -> Signal.message address (NewQuery query)
       ]
       []
-    , Html.p [] [ text "Search" ]
     , ul
-      []
+      [ style [ ("width", "100%") ] ]
       <| List.map (li [] << flip (::) [] << text) model.output
     ]
 
@@ -83,3 +83,4 @@ main =
 port tasks : Signal (Task Effects.Never ())
 port tasks =
   app.tasks
+
