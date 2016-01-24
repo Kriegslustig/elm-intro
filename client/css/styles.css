@@ -37,12 +37,14 @@ h2 {
 }
 
 h1 {
+  margin-top: 0;
   font-size: 2rem;
   font-weight: 400px;
 }
 
 article {
-  display: flex;
+  display: inline-flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 1rem;
@@ -53,4 +55,18 @@ article {
 .deck {
   transition: transform .2s ease-in-out;
 }
+
+.slide[data-title="Elm Reactor"] .slide__content,
+.slide[data-title="Reactive Suche"] .slide__content {
+  width: 100%;
+}
+
+.slide[data-title="Reactive Suche"] {
+  display: inline-block;
+}
+
+.slide__content {
+  width: auto;
+}
+
 

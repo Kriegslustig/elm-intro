@@ -1,4 +1,4 @@
-# H!
+# Reactive Suche
 
 <div class="searchExample"></div>
 <script>

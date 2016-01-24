@@ -11373,9 +11373,9 @@ Elm.Presentation.make = function (_elm) {
    var renderSlide = F2(function (notes,slide) {
       return A2($Html.article,
       _U.list([$Html$Attributes.$class("slide")
+              ,A2($Html$Attributes.attribute,"data-title",slide.title)
               ,$Html$Attributes.style(_U.list([A2(_op["=>"],"width","calc(100vw - 15px)")
                                               ,A2(_op["=>"],"min-height","100vh")
-                                              ,A2(_op["=>"],"display","inline-block")
                                               ,A2(_op["=>"],"vertical-align","top")
                                               ,A2(_op["=>"],"white-space","normal")]))]),
       _U.list([A2($Html.h1,_U.list([]),_U.list([$Html.text(slide.title)]))

@@ -5,7 +5,7 @@ import Keyboard
 import Maybe exposing (Maybe(Just, Nothing))
 import List exposing ((::))
 import Html exposing (Html, div, h1, article, fromElement, text, p)
-import Html.Attributes exposing (style, class)
+import Html.Attributes exposing (style, class, attribute)
 import Html.Events exposing (onKeyDown)
 import Markdown
 import Effects exposing (Effects)
@@ -107,10 +107,10 @@ renderSlide : Bool -> Slide -> Html
 renderSlide notes slide =
   article
     [ class "slide"
+    , attribute "data-title" slide.title
     , style
       [ "width" => "calc(100vw - 15px)"
       , "min-height" => "100vh"
-      , "display" => "inline-block"
       , "vertical-align" => "top"
       , "white-space" => "normal"
       ]
