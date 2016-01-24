@@ -11628,6 +11628,11 @@ Elm.Presentation.make = function (_elm) {
    $String = Elm.String.make(_elm),
    $Task = Elm.Task.make(_elm);
    var _op = {};
+   var storeIn = Elm.Native.Port.make(_elm).inboundSignal("storeIn",
+   "Int",
+   function (v) {
+      return typeof v === "number" && isFinite(v) && Math.floor(v) === v ? v : _U.badPort("an integer",v);
+   });
    var translateX = function (i) {    return A2($Basics._op["++"],"translateX(",A2($Basics._op["++"],$Basics.toString(i),"vw)"));};
    var parseHash = function (_p0) {    return A2($Result.withDefault,0,$String.toInt(A2($String.dropLeft,1,_p0)));};
    var initHashSignal = Elm.Native.Port.make(_elm).inbound("initHashSignal",
@@ -11642,30 +11647,12 @@ Elm.Presentation.make = function (_elm) {
    });
    var AddSlides = function (a) {    return {ctor: "AddSlides",_0: a};};
    var SetSlide = function (a) {    return {ctor: "SetSlide",_0: a};};
+   var storeInSig = A2($Signal.map,SetSlide,storeIn);
    var hashSignal = A2($Signal.map,function (_p1) {    return SetSlide(parseHash(_p1));},$History.hash);
    var ToggleNotes = {ctor: "ToggleNotes"};
    var NextSlide = {ctor: "NextSlide"};
    var PrevSlide = {ctor: "PrevSlide"};
    var NoOp = {ctor: "NoOp"};
-   var setSlideHash = function (slide) {
-      return $Effects.task(A2($Task.map,
-      function (res) {
-         return NoOp;
-      },
-      $Task.toResult($History.setPath(A2(F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),"/#",$Basics.toString(slide))))));
-   };
-   var update = F2(function (action,model) {
-      var _p2 = action;
-      switch (_p2.ctor)
-      {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
-         case "NextSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: model.slide + 1}),_1: setSlideHash(model.slide + 1)};
-         case "PrevSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: model.slide - 1}),_1: setSlideHash(model.slide - 1)};
-         case "SetSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: _p2._0}),_1: $Effects.none};
-         case "AddSlides": return {ctor: "_Tuple2"
-                                  ,_0: _U.update(model,{slides: A2($Basics._op["++"],model.slides,A2($Maybe.withDefault,_U.list([]),_p2._0))})
-                                  ,_1: $Effects.none};
-         default: return {ctor: "_Tuple2",_0: _U.update(model,{showNotes: $Basics.not(model.showNotes)}),_1: $Effects.none};}
-   });
    var keySignal = A2($Signal.map,
    function (key) {
       return _U.eq(key,39) ? NextSlide : _U.eq(key,37) ? PrevSlide : _U.eq(key,78) ? ToggleNotes : NoOp;
@@ -11679,6 +11666,34 @@ Elm.Presentation.make = function (_elm) {
    A2($Json$Decode._op[":="],"notes",$Json$Decode.string)));
    var getSlides = function (url) {    return $Effects.task(A2($Task.map,AddSlides,$Task.toMaybe(A2($Http.get,slidesDecoder,url))));};
    var init = {ctor: "_Tuple2",_0: {slide: parseHash(initHashSignal),slides: _U.list([]),showNotes: false},_1: getSlides("/slides")};
+   var slideMailbox = $Signal.mailbox($Basics.fst(init).slide);
+   var setSlideHash = function (slide) {
+      return $Effects.batch(_U.list([$Effects.task(A2($Task.map,
+                                    function (res) {
+                                       return NoOp;
+                                    },
+                                    $Task.toResult($History.setPath(A2(F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
+                                    "/#",
+                                    $Basics.toString(slide))))))
+                                    ,$Effects.task(A2($Task.map,
+                                    function (res) {
+                                       return NoOp;
+                                    },
+                                    $Task.toResult(A2($Signal.send,slideMailbox.address,slide))))]));
+   };
+   var update = F2(function (action,model) {
+      var _p2 = action;
+      switch (_p2.ctor)
+      {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
+         case "NextSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: model.slide + 1}),_1: setSlideHash(model.slide + 1)};
+         case "PrevSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: model.slide - 1}),_1: setSlideHash(model.slide - 1)};
+         case "SetSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: _p2._0}),_1: $Effects.none};
+         case "AddSlides": return {ctor: "_Tuple2"
+                                  ,_0: _U.update(model,{slides: A2($Basics._op["++"],model.slides,A2($Maybe.withDefault,_U.list([]),_p2._0))})
+                                  ,_1: $Effects.none};
+         default: return {ctor: "_Tuple2",_0: _U.update(model,{showNotes: $Basics.not(model.showNotes)}),_1: $Effects.none};}
+   });
+   var storeOut = Elm.Native.Port.make(_elm).outboundSignal("storeOut",function (v) {    return v;},slideMailbox.signal);
    var Model = F3(function (a,b,c) {    return {slide: a,slides: b,showNotes: c};});
    _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
    var renderSlide = F2(function (notes,slide) {
@@ -11710,7 +11725,7 @@ Elm.Presentation.make = function (_elm) {
                       ,$Html$Attributes.$class("page")]),
               _U.list([$Html.text($Basics.toString(model.slide))]))]));
    });
-   var app = $StartApp.start({init: init,view: view,update: update,inputs: _U.list([hashSignal,keySignal])});
+   var app = $StartApp.start({init: init,view: view,update: update,inputs: _U.list([hashSignal,keySignal,storeInSig])});
    var main = app.html;
    var tasks = Elm.Native.Task.make(_elm).performSignal("tasks",app.tasks);
    var newSlides = Elm.Native.Port.make(_elm).outboundSignal("newSlides",
@@ -11729,6 +11744,7 @@ Elm.Presentation.make = function (_elm) {
                                      ,AddSlides: AddSlides
                                      ,update: update
                                      ,setSlideHash: setSlideHash
+                                     ,storeInSig: storeInSig
                                      ,getSlides: getSlides
                                      ,slidesDecoder: slidesDecoder
                                      ,keySignal: keySignal
@@ -11739,7 +11755,8 @@ Elm.Presentation.make = function (_elm) {
                                      ,init: init
                                      ,view: view
                                      ,app: app
-                                     ,main: main};
+                                     ,main: main
+                                     ,slideMailbox: slideMailbox};
 };
 Elm.SearchExample = Elm.SearchExample || {};
 Elm.SearchExample.make = function (_elm) {

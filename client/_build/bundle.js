@@ -8,7 +8,18 @@ var mapElems = function mapElems(className, cb) {
 
 var presentation = Elm.fullscreen(Elm.Presentation, {
   keyDown: 0,
-  initHashSignal: location.hash
+  initHashSignal: location.hash,
+  storeIn: 0
+});
+
+window.addEventListener('storage', function (e) {
+  var slide = window.localStorage.slide;
+  if (!slide) return;
+  presentation.ports.storeIn.send(Number(slide));
+});
+
+presentation.ports.storeOut.subscribe(function (slide) {
+  window.localStorage.slide = slide;
 });
 
 window.addEventListener('keydown', function (e) {

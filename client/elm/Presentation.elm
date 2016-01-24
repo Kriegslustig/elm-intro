@@ -1,6 +1,6 @@
 module Presentation where
 
-import Signal exposing (Address, map, merge)
+import Signal exposing (Address, map, merge, Mailbox, mailbox)
 import String
 import Keyboard
 import Maybe exposing (Maybe(Just, Nothing))
@@ -84,12 +84,22 @@ update action model =
 
 setSlideHash : Int -> Effects Action
 setSlideHash slide =
-  toString slide
-    |> (++) "/#"
-    |> History.setPath
-    |> Task.toResult
-    |> Task.map (\res -> NoOp)
-    |> Effects.task
+  Effects.batch
+    [ toString slide
+      |> (++) "/#"
+      |> History.setPath
+      |> Task.toResult
+      |> Task.map (\res -> NoOp)
+      |> Effects.task
+    , Signal.send slideMailbox.address slide
+      |> Task.toResult
+      |> Task.map (\res -> NoOp)
+      |> Effects.task
+    ]
+
+storeInSig : Signal Action
+storeInSig =
+  Signal.map SetSlide storeIn
 
 getSlides : String -> Effects Action
 getSlides url =
@@ -207,7 +217,7 @@ app =
     { init = init
     , view = view
     , update = update
-    , inputs = [hashSignal, keySignal]
+    , inputs = [hashSignal, keySignal, storeInSig]
     }
 
 main : Signal Html
@@ -217,6 +227,16 @@ main =
 port tasks : Signal (Task Effects.Never ())
 port tasks =
   app.tasks
+
+slideMailbox : Mailbox Int
+slideMailbox =
+  mailbox (fst init).slide
+
+port storeIn : Signal Int
+
+port storeOut : Signal Int
+port storeOut =
+  slideMailbox.signal
 
 port newSlides : Signal Int
 port newSlides =
