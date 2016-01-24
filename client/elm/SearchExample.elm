@@ -3,7 +3,7 @@ module SearchExample where
 import Signal
 import String exposing (contains, toLower)
 import Html exposing (..)
-import Html.Attributes exposing (type', style)
+import Html.Attributes exposing (type', style, placeholder)
 import Html.Events exposing (on, targetValue)
 import Http
 import Effects exposing (Effects, none)
@@ -54,8 +54,10 @@ view address model =
       [ type' "text"
       , on "input" targetValue
         <| \query -> Signal.message address (NewQuery query)
+      , placeholder "Gib hier Text ein..."
       ]
       []
+    , p [] [ text <| "Resultate: " ++ toString (List.length model.output) ]
     , ul
       [ style [ ("width", "100%") ] ]
       <| List.map (li [] << flip (::) [] << text) model.output

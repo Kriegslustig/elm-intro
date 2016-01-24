@@ -108,8 +108,8 @@ renderSlide notes slide =
   article
     [ class "slide"
     , style
-      [ "width" => "100vw"
-      , "height" => "100vh"
+      [ "width" => "calc(100vw - 15px)"
+      , "min-height" => "100vh"
       , "display" => "inline-block"
       , "vertical-align" => "top"
       , "white-space" => "normal"
@@ -156,14 +156,16 @@ view address model =
           , "transform" => translateX (negate (model.slide * 100))
           , "height" => "100vh"
           ]
+      , class "deck"
       ]
       <| List.map (renderSlide model.showNotes) model.slides
-    , p
+    , div
       [ style
         [ "position" => "fixed"
-        , "bottom" => "0"
-        , "left" => "0"
+        , "bottom" => "25px"
+        , "left" => "25px"
         ]
+      , class "page"
       ]
       [ text <| toString model.slide ]
     ]

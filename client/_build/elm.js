@@ -11373,8 +11373,8 @@ Elm.Presentation.make = function (_elm) {
    var renderSlide = F2(function (notes,slide) {
       return A2($Html.article,
       _U.list([$Html$Attributes.$class("slide")
-              ,$Html$Attributes.style(_U.list([A2(_op["=>"],"width","100vw")
-                                              ,A2(_op["=>"],"height","100vh")
+              ,$Html$Attributes.style(_U.list([A2(_op["=>"],"width","calc(100vw - 15px)")
+                                              ,A2(_op["=>"],"min-height","100vh")
                                               ,A2(_op["=>"],"display","inline-block")
                                               ,A2(_op["=>"],"vertical-align","top")
                                               ,A2(_op["=>"],"white-space","normal")]))]),
@@ -11391,10 +11391,12 @@ Elm.Presentation.make = function (_elm) {
               _U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"position","absolute")
                                                       ,A2(_op["=>"],"white-space","nowrap")
                                                       ,A2(_op["=>"],"transform",translateX($Basics.negate(model.slide * 100)))
-                                                      ,A2(_op["=>"],"height","100vh")]))]),
+                                                      ,A2(_op["=>"],"height","100vh")]))
+                      ,$Html$Attributes.$class("deck")]),
               A2($List.map,renderSlide(model.showNotes),model.slides))
-              ,A2($Html.p,
-              _U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"position","fixed"),A2(_op["=>"],"bottom","0"),A2(_op["=>"],"left","0")]))]),
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"position","fixed"),A2(_op["=>"],"bottom","25px"),A2(_op["=>"],"left","25px")]))
+                      ,$Html$Attributes.$class("page")]),
               _U.list([$Html.text($Basics.toString(model.slide))]))]));
    });
    var app = $StartApp.start({init: init,view: view,update: update,inputs: _U.list([keySignal])});
@@ -11464,8 +11466,10 @@ Elm.SearchExample.make = function (_elm) {
       _U.list([]),
       _U.list([A2($Html.input,
               _U.list([$Html$Attributes.type$("text")
-                      ,A3($Html$Events.on,"input",$Html$Events.targetValue,function (query) {    return A2($Signal.message,address,NewQuery(query));})]),
+                      ,A3($Html$Events.on,"input",$Html$Events.targetValue,function (query) {    return A2($Signal.message,address,NewQuery(query));})
+                      ,$Html$Attributes.placeholder("Gib hier Text ein...")]),
               _U.list([]))
+              ,A2($Html.p,_U.list([]),_U.list([$Html.text(A2($Basics._op["++"],"Resultate: ",$Basics.toString($List.length(model.output))))]))
               ,A2($Html.ul,
               _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"}]))]),
               A2($List.map,
