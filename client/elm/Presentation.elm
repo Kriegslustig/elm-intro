@@ -1,6 +1,7 @@
 module Presentation where
 
 import Signal exposing (Address, map, merge)
+import String
 import Keyboard
 import Maybe exposing (Maybe(Just, Nothing))
 import List exposing ((::))
@@ -13,6 +14,7 @@ import Http
 import Json.Decode exposing ((:=))
 import Task exposing (Task)
 import StartApp
+import History
 
 import Debug
 
@@ -48,14 +50,14 @@ update action model =
       ( { model |
           slide = model.slide+1
         }
-      , Effects.none
+      , setSlideHash <| model.slide+1
       )
 
     PrevSlide ->
       ( { model |
           slide = model.slide-1
         }
-      , Effects.none
+      , setSlideHash <| model.slide-1
       )
 
     AddSlides maybeSlides ->
@@ -71,6 +73,15 @@ update action model =
         }
       , Effects.none
       )
+
+setSlideHash : Int -> Effects Action
+setSlideHash slide =
+  toString slide
+    |> (++) "/#"
+    |> History.setPath
+    |> Task.toResult
+    |> Task.map (\res -> NoOp)
+    |> Effects.task
 
 getSlides : String -> Effects Action
 getSlides url =
