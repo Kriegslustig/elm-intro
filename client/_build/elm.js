@@ -8580,6 +8580,86 @@ Elm.Keyboard.make = function (_elm) {
                                  ,keysDown: keysDown
                                  ,presses: presses};
 };
+Elm.Native = Elm.Native || {};
+Elm.Native.Window = {};
+Elm.Native.Window.make = function make(localRuntime) {
+	localRuntime.Native = localRuntime.Native || {};
+	localRuntime.Native.Window = localRuntime.Native.Window || {};
+	if (localRuntime.Native.Window.values)
+	{
+		return localRuntime.Native.Window.values;
+	}
+
+	var NS = Elm.Native.Signal.make(localRuntime);
+	var Tuple2 = Elm.Native.Utils.make(localRuntime).Tuple2;
+
+
+	function getWidth()
+	{
+		return localRuntime.node.clientWidth;
+	}
+
+
+	function getHeight()
+	{
+		if (localRuntime.isFullscreen())
+		{
+			return window.innerHeight;
+		}
+		return localRuntime.node.clientHeight;
+	}
+
+
+	var dimensions = NS.input('Window.dimensions', Tuple2(getWidth(), getHeight()));
+
+
+	function resizeIfNeeded()
+	{
+		// Do not trigger event if the dimensions have not changed.
+		// This should be most of the time.
+		var w = getWidth();
+		var h = getHeight();
+		if (dimensions.value._0 === w && dimensions.value._1 === h)
+		{
+			return;
+		}
+
+		setTimeout(function() {
+			// Check again to see if the dimensions have changed.
+			// It is conceivable that the dimensions have changed
+			// again while some other event was being processed.
+			w = getWidth();
+			h = getHeight();
+			if (dimensions.value._0 === w && dimensions.value._1 === h)
+			{
+				return;
+			}
+			localRuntime.notify(dimensions.id, Tuple2(w, h));
+		}, 0);
+	}
+
+
+	localRuntime.addListener([dimensions.id], window, 'resize', resizeIfNeeded);
+
+
+	return localRuntime.Native.Window.values = {
+		dimensions: dimensions,
+		resizeIfNeeded: resizeIfNeeded
+	};
+};
+
+Elm.Window = Elm.Window || {};
+Elm.Window.make = function (_elm) {
+   "use strict";
+   _elm.Window = _elm.Window || {};
+   if (_elm.Window.values) return _elm.Window.values;
+   var _U = Elm.Native.Utils.make(_elm),$Basics = Elm.Basics.make(_elm),$Native$Window = Elm.Native.Window.make(_elm),$Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var dimensions = $Native$Window.dimensions;
+   var width = A2($Signal.map,$Basics.fst,dimensions);
+   var height = A2($Signal.map,$Basics.snd,dimensions);
+   return _elm.Window.values = {_op: _op,dimensions: dimensions,width: width,height: height};
+};
 Elm.Native.Effects = {};
 Elm.Native.Effects.make = function(localRuntime) {
 
@@ -11447,6 +11527,84 @@ Elm.HackerNews.make = function (_elm) {
    };
    return _elm.HackerNews.values = {_op: _op,getNews: getNews,getNewsTask: getNewsTask,decodeNewsList: decodeNewsList};
 };
+Elm.Main = Elm.Main || {};
+Elm.Main.make = function (_elm) {
+   "use strict";
+   _elm.Main = _elm.Main || {};
+   if (_elm.Main.values) return _elm.Main.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Color = Elm.Color.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $Keyboard = Elm.Keyboard.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Time = Elm.Time.make(_elm),
+   $Window = Elm.Window.make(_elm);
+   var _op = {};
+   var input = function () {
+      var delta = A2($Signal.map,function (t) {    return t / 20;},$Time.fps(30));
+      return A2($Signal.sampleOn,delta,A3($Signal.map2,F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}),delta,$Keyboard.arrows));
+   }();
+   var view = F2(function (_p0,mario) {
+      var _p1 = _p0;
+      var _p5 = _p1._0;
+      var _p4 = _p1._1;
+      var dir = function () {    var _p2 = mario.dir;if (_p2.ctor === "Left") {    return "left";} else {    return "right";}}();
+      var verb = _U.cmp(mario.y,0) > 0 ? "jump" : !_U.eq(mario.vx,0) ? "walk" : "stand";
+      var src = A2($Basics._op["++"],"http://localhost:3000/img/",A2($Basics._op["++"],verb,A2($Basics._op["++"],"_",A2($Basics._op["++"],dir,".gif"))));
+      var marioImage = A3($Graphics$Element.image,35,35,src);
+      var _p3 = {ctor: "_Tuple2",_0: $Basics.toFloat(_p5),_1: $Basics.toFloat(_p4)};
+      var w = _p3._0;
+      var h = _p3._1;
+      var groundY = 62 - h / 2;
+      var position = {ctor: "_Tuple2",_0: mario.x,_1: mario.y + groundY};
+      return A3($Graphics$Collage.collage,
+      _p5,
+      _p4,
+      _U.list([A2($Graphics$Collage.filled,A3($Color.rgb,174,238,238),A2($Graphics$Collage.rect,w,h))
+              ,A2($Graphics$Collage.move,
+              {ctor: "_Tuple2",_0: 0,_1: 24 - h / 2},
+              A2($Graphics$Collage.filled,A3($Color.rgb,74,167,43),A2($Graphics$Collage.rect,w,50)))
+              ,A2($Graphics$Collage.move,position,$Graphics$Collage.toForm(marioImage))]));
+   });
+   var physics = F2(function (dt,mario) {    return _U.update(mario,{x: mario.x + dt * mario.vx,y: A2($Basics.max,0,mario.y + dt * mario.vy)});});
+   var gravity = F2(function (dt,mario) {    return _U.update(mario,{vy: _U.cmp(mario.y,0) > 0 ? mario.vy - dt / 4 : 0});});
+   var jump = F2(function (keys,mario) {    return _U.cmp(keys.y,0) > 0 && _U.eq(mario.vy,0) ? _U.update(mario,{vy: 6.0}) : mario;});
+   var Keys = F2(function (a,b) {    return {x: a,y: b};});
+   var Right = {ctor: "Right"};
+   var mario = {x: 0,y: 0,vx: 0,vy: 0,dir: Right};
+   var Left = {ctor: "Left"};
+   var walk = F2(function (keys,mario) {
+      return _U.update(mario,{vx: $Basics.toFloat(keys.x),dir: _U.cmp(keys.x,0) < 0 ? Left : _U.cmp(keys.x,0) > 0 ? Right : mario.dir});
+   });
+   var update = F2(function (_p6,mario) {
+      var _p7 = _p6;
+      var _p9 = _p7._1;
+      var _p8 = _p7._0;
+      return A2(physics,_p8,A2(walk,_p9,A2(jump,_p9,A2(gravity,_p8,mario))));
+   });
+   var main = A3($Signal.map2,view,$Window.dimensions,A3($Signal.foldp,update,mario,input));
+   var Model = F5(function (a,b,c,d,e) {    return {x: a,y: b,vx: c,vy: d,dir: e};});
+   return _elm.Main.values = {_op: _op
+                             ,Model: Model
+                             ,Left: Left
+                             ,Right: Right
+                             ,Keys: Keys
+                             ,mario: mario
+                             ,update: update
+                             ,jump: jump
+                             ,gravity: gravity
+                             ,physics: physics
+                             ,walk: walk
+                             ,view: view
+                             ,main: main
+                             ,input: input};
+};
 Elm.Presentation = Elm.Presentation || {};
 Elm.Presentation.make = function (_elm) {
    "use strict";
@@ -11467,15 +11625,24 @@ Elm.Presentation.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $StartApp = Elm.StartApp.make(_elm),
+   $String = Elm.String.make(_elm),
    $Task = Elm.Task.make(_elm);
    var _op = {};
    var translateX = function (i) {    return A2($Basics._op["++"],"translateX(",A2($Basics._op["++"],$Basics.toString(i),"vw)"));};
+   var parseHash = function (_p0) {    return A2($Result.withDefault,0,$String.toInt(A2($String.dropLeft,1,_p0)));};
+   var initHashSignal = Elm.Native.Port.make(_elm).inbound("initHashSignal",
+   "String",
+   function (v) {
+      return typeof v === "string" || typeof v === "object" && v instanceof String ? v : _U.badPort("a string",v);
+   });
    var keyDown = Elm.Native.Port.make(_elm).inboundSignal("keyDown",
    "Int",
    function (v) {
       return typeof v === "number" && isFinite(v) && Math.floor(v) === v ? v : _U.badPort("an integer",v);
    });
    var AddSlides = function (a) {    return {ctor: "AddSlides",_0: a};};
+   var SetSlide = function (a) {    return {ctor: "SetSlide",_0: a};};
+   var hashSignal = A2($Signal.map,function (_p1) {    return SetSlide(parseHash(_p1));},$History.hash);
    var ToggleNotes = {ctor: "ToggleNotes"};
    var NextSlide = {ctor: "NextSlide"};
    var PrevSlide = {ctor: "PrevSlide"};
@@ -11488,13 +11655,14 @@ Elm.Presentation.make = function (_elm) {
       $Task.toResult($History.setPath(A2(F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),"/#",$Basics.toString(slide))))));
    };
    var update = F2(function (action,model) {
-      var _p0 = action;
-      switch (_p0.ctor)
+      var _p2 = action;
+      switch (_p2.ctor)
       {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
          case "NextSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: model.slide + 1}),_1: setSlideHash(model.slide + 1)};
          case "PrevSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: model.slide - 1}),_1: setSlideHash(model.slide - 1)};
+         case "SetSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: _p2._0}),_1: $Effects.none};
          case "AddSlides": return {ctor: "_Tuple2"
-                                  ,_0: _U.update(model,{slides: A2($Basics._op["++"],model.slides,A2($Maybe.withDefault,_U.list([]),_p0._0))})
+                                  ,_0: _U.update(model,{slides: A2($Basics._op["++"],model.slides,A2($Maybe.withDefault,_U.list([]),_p2._0))})
                                   ,_1: $Effects.none};
          default: return {ctor: "_Tuple2",_0: _U.update(model,{showNotes: $Basics.not(model.showNotes)}),_1: $Effects.none};}
    });
@@ -11510,7 +11678,7 @@ Elm.Presentation.make = function (_elm) {
    A2($Json$Decode._op[":="],"content",$Json$Decode.string),
    A2($Json$Decode._op[":="],"notes",$Json$Decode.string)));
    var getSlides = function (url) {    return $Effects.task(A2($Task.map,AddSlides,$Task.toMaybe(A2($Http.get,slidesDecoder,url))));};
-   var init = {ctor: "_Tuple2",_0: {slide: 0,slides: _U.list([]),showNotes: false},_1: getSlides("/slides")};
+   var init = {ctor: "_Tuple2",_0: {slide: parseHash(initHashSignal),slides: _U.list([]),showNotes: false},_1: getSlides("/slides")};
    var Model = F3(function (a,b,c) {    return {slide: a,slides: b,showNotes: c};});
    _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
    var renderSlide = F2(function (notes,slide) {
@@ -11542,7 +11710,7 @@ Elm.Presentation.make = function (_elm) {
                       ,$Html$Attributes.$class("page")]),
               _U.list([$Html.text($Basics.toString(model.slide))]))]));
    });
-   var app = $StartApp.start({init: init,view: view,update: update,inputs: _U.list([keySignal])});
+   var app = $StartApp.start({init: init,view: view,update: update,inputs: _U.list([hashSignal,keySignal])});
    var main = app.html;
    var tasks = Elm.Native.Task.make(_elm).performSignal("tasks",app.tasks);
    var newSlides = Elm.Native.Port.make(_elm).outboundSignal("newSlides",
@@ -11557,12 +11725,15 @@ Elm.Presentation.make = function (_elm) {
                                      ,PrevSlide: PrevSlide
                                      ,NextSlide: NextSlide
                                      ,ToggleNotes: ToggleNotes
+                                     ,SetSlide: SetSlide
                                      ,AddSlides: AddSlides
                                      ,update: update
                                      ,setSlideHash: setSlideHash
                                      ,getSlides: getSlides
                                      ,slidesDecoder: slidesDecoder
                                      ,keySignal: keySignal
+                                     ,parseHash: parseHash
+                                     ,hashSignal: hashSignal
                                      ,renderSlide: renderSlide
                                      ,translateX: translateX
                                      ,init: init

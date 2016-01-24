@@ -5,5 +5,6 @@ const app = koa()
 
 routes(app, '/')
 app.use(koaStatic(`${__dirname}/../client/_build`))
+app.use(koaStatic(`${__dirname}/../client`))
 app.listen(3000)
 

@@ -8,6 +8,10 @@ body {
   font-weight: 100;
 }
 
+strong {
+  font-weight: 800;
+}
+
 html {
   font-family: 'Input Sans', 'Courier New';
   overflow-x: hidden;
@@ -42,6 +46,10 @@ h1 {
   font-weight: 400px;
 }
 
+video {
+  width: 100%;
+}
+
 article {
   position: relative;
   display: inline-flex;
@@ -51,6 +59,12 @@ article {
   padding: 1rem;
   margin-right: 15px;
   border: 10px solid hsl(40, 40%, 80%);
+}
+
+.note {
+  font-size: .5rem;
+  text-align: right;
+  font-style: italic;
 }
 
 .deck {
@@ -77,6 +91,6 @@ article {
   width: 100%;
   height: 100%;
   padding: 2rem;
-  background-color: hsla(40, 40%, 80%, .8);
+  background-color: hsla(40, 20%, 90%, .98);
 }
 

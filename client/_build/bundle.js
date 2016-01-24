@@ -6,7 +6,10 @@ var mapElems = function mapElems(className, cb) {
   return [].map.call(document.getElementsByClassName(className), cb);
 };
 
-var presentation = Elm.fullscreen(Elm.Presentation, { keyDown: 0 });
+var presentation = Elm.fullscreen(Elm.Presentation, {
+  keyDown: 0,
+  initHashSignal: location.hash
+});
 
 window.addEventListener('keydown', function (e) {
   if (e.target.tagName === 'INPUT' || e.metaKey === true) return;
