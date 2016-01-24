@@ -120,7 +120,7 @@ renderSlide notes slide =
       [ text slide.title ]
     , div
       [ class "slide__content" ]
-      [ fromElement <| Markdown.toElement slide.content ]
+      [ Markdown.toHtml slide.content ]
     , div
       [ class "slide__notes"
       , style [ "display" =>
@@ -129,7 +129,7 @@ renderSlide notes slide =
              else "none"
         ]
       ]
-      [ fromElement <| Markdown.toElement slide.notes ]
+      [ Markdown.toHtml slide.notes ]
     ]
 
 translateX : Int -> String
