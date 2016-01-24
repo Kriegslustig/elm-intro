@@ -100,7 +100,7 @@ renderSlide slide =
       ]
     ]
     [ h1
-      []
+      [ style [ "white-space" => "initial" ] ]
       [ text slide.title ]
     , div
       [ class "slide__content" ]
@@ -130,22 +130,18 @@ view address model =
     []
     [ div
       [ style
-          [ ("position", "absolute")
-          , ("white-space", "nowrap")
-          , ("transform"
-            , translateX
-                <| negate
-                <| model.slide * 100
-            )
-          , ("height", "100vh")
+          [ "position" => "absolute"
+          , "white-space" => "nowrap"
+          , "transform" => translateX (negate (model.slide * 100))
+          , "height" => "100vh"
           ]
       ]
       <| List.map renderSlide model.slides
     , p
       [ style
-        [ ("position", "fixed")
-        , ("bottom", "0")
-        , ("left", "0")
+        [ "position" => "fixed"
+        , "bottom" => "0"
+        , "left" => "0"
         ]
       ]
       [ text <| toString model.slide ]

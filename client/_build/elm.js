@@ -11367,7 +11367,7 @@ Elm.Presentation.make = function (_elm) {
                                               ,A2(_op["=>"],"height","100vh")
                                               ,A2(_op["=>"],"display","inline-block")
                                               ,A2(_op["=>"],"vertical-align","top")]))]),
-      _U.list([A2($Html.h1,_U.list([]),_U.list([$Html.text(slide.title)]))
+      _U.list([A2($Html.h1,_U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"white-space","initial")]))]),_U.list([$Html.text(slide.title)]))
               ,A2($Html.div,_U.list([$Html$Attributes.$class("slide__content")]),_U.list([$Html.fromElement($Markdown.toElement(slide.content))]))
               ,A2($Html.div,
               _U.list([$Html$Attributes.$class("slide__notes"),$Html$Attributes.style(_U.list([A2(_op["=>"],"display","none")]))]),
@@ -11377,15 +11377,13 @@ Elm.Presentation.make = function (_elm) {
       return A2($Html.div,
       _U.list([]),
       _U.list([A2($Html.div,
-              _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "position",_1: "absolute"}
-                                                      ,{ctor: "_Tuple2",_0: "white-space",_1: "nowrap"}
-                                                      ,{ctor: "_Tuple2",_0: "transform",_1: translateX($Basics.negate(model.slide * 100))}
-                                                      ,{ctor: "_Tuple2",_0: "height",_1: "100vh"}]))]),
+              _U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"position","absolute")
+                                                      ,A2(_op["=>"],"white-space","nowrap")
+                                                      ,A2(_op["=>"],"transform",translateX($Basics.negate(model.slide * 100)))
+                                                      ,A2(_op["=>"],"height","100vh")]))]),
               A2($List.map,renderSlide,model.slides))
               ,A2($Html.p,
-              _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "position",_1: "fixed"}
-                                                      ,{ctor: "_Tuple2",_0: "bottom",_1: "0"}
-                                                      ,{ctor: "_Tuple2",_0: "left",_1: "0"}]))]),
+              _U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"position","fixed"),A2(_op["=>"],"bottom","0"),A2(_op["=>"],"left","0")]))]),
               _U.list([$Html.text($Basics.toString(model.slide))]))]));
    });
    var app = $StartApp.start({init: init,view: view,update: update,inputs: _U.list([keySignal])});

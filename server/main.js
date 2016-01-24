@@ -17,7 +17,7 @@ module.exports = (app, prefix) => {
   })
   router.get('/slides', function *(next) {
     yield co(() => new Promise((res, rej) => {
-      getMarkdown('*')
+      getMarkdown(`*`)
         .then(md => {
           this.body = JSON.stringify(md)
           this.status = 200
