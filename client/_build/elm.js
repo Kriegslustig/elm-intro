@@ -11503,11 +11503,13 @@ Elm.StartApp.make = function (_elm) {
    var Config = F4(function (a,b,c,d) {    return {init: a,update: b,view: c,inputs: d};});
    return _elm.StartApp.values = {_op: _op,start: start,Config: Config,App: App};
 };
-Elm.HackerNews = Elm.HackerNews || {};
-Elm.HackerNews.make = function (_elm) {
+Elm.Lib = Elm.Lib || {};
+Elm.Lib.HackerNews = Elm.Lib.HackerNews || {};
+Elm.Lib.HackerNews.make = function (_elm) {
    "use strict";
-   _elm.HackerNews = _elm.HackerNews || {};
-   if (_elm.HackerNews.values) return _elm.HackerNews.values;
+   _elm.Lib = _elm.Lib || {};
+   _elm.Lib.HackerNews = _elm.Lib.HackerNews || {};
+   if (_elm.Lib.HackerNews.values) return _elm.Lib.HackerNews.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
@@ -11525,7 +11527,7 @@ Elm.HackerNews.make = function (_elm) {
    var getNews = function (a) {
       return $Effects.task(A2($Task.map,function (res) {    return a(A2($Result.withDefault,_U.list([]),res));},$Task.toResult(getNewsTask)));
    };
-   return _elm.HackerNews.values = {_op: _op,getNews: getNews,getNewsTask: getNewsTask,decodeNewsList: decodeNewsList};
+   return _elm.Lib.HackerNews.values = {_op: _op,getNews: getNews,getNewsTask: getNewsTask,decodeNewsList: decodeNewsList};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {
@@ -11767,10 +11769,10 @@ Elm.SearchExample.make = function (_elm) {
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Effects = Elm.Effects.make(_elm),
-   $HackerNews = Elm.HackerNews.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $Html$Events = Elm.Html.Events.make(_elm),
+   $Lib$HackerNews = Elm.Lib.HackerNews.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
@@ -11791,7 +11793,7 @@ Elm.SearchExample.make = function (_elm) {
            return {ctor: "_Tuple2",_0: _U.update(model,{inList: _p2,output: _p2}),_1: $Effects.none};}
    });
    var NewInput = function (a) {    return {ctor: "NewInput",_0: a};};
-   var init = {ctor: "_Tuple2",_0: {inList: _U.list([]),output: _U.list([])},_1: $HackerNews.getNews(NewInput)};
+   var init = {ctor: "_Tuple2",_0: {inList: _U.list([]),output: _U.list([])},_1: $Lib$HackerNews.getNews(NewInput)};
    var NewQuery = function (a) {    return {ctor: "NewQuery",_0: a};};
    var view = F2(function (address,model) {
       return A2($Html.div,

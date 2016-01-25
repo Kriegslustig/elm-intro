@@ -1,3 +1,5 @@
+const rExample = require('./lib/rExample')
+
 const Elm = window.Elm
 
 const mapElems = (className, cb) => [].map
@@ -44,6 +46,7 @@ window.addEventListener('keydown', e => {
       mapElems('searchExample', el => {
         Elm.embed(Elm.SearchExample, el)
       })
+      mapElems('rExample', rExample)
     }, 100) // Wait for view to update
     ran = true
   })
