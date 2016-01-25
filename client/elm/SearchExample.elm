@@ -10,7 +10,7 @@ import Effects exposing (Effects, none)
 import StartApp
 import Task exposing (Task)
 
-import HackerNews
+import Lib.HackerNews as HackerNews
 
 type alias Model =
   { output : List String

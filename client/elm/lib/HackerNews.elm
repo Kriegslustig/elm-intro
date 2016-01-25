@@ -1,4 +1,4 @@
-module HackerNews where
+module Lib.HackerNews where
 
 import Http
 import Result exposing (withDefault)
