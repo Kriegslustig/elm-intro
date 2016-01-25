@@ -10,12 +10,14 @@ module.exports = grunt => {
       'client/_build/bundle.css'
     ],
     elm: [
-      [ 'client/elm/**/*.elm' ],
-      'client/_build/elm.js'
+      [ 'client/elm/*.elm' ],
+      'client/_build/elm.js',
+      [ 'client/elm/**/*.elm' ]
     ],
     js: [
-      [ 'client/js/**/*.js' ],
-      'client/_build/bundle.js'
+      [ 'client/js/*.js' ],
+      'client/_build/bundle.js',
+      [ 'client/js/**/*.js' ]
     ]
   }
 
@@ -26,12 +28,12 @@ module.exports = grunt => {
         tasks: ['postcss']
       },
       elm: {
-        files: files.elm[0],
+        files: files.elm[2],
         tasks: ['elm']
       },
       js: {
-        files: files.js[0],
-        tasks: ['babel']
+        files: files.js[2],
+        tasks: ['browserify']
       }
     },
     pkg: grunt.file.readJSON('package.json'),
@@ -57,19 +59,26 @@ module.exports = grunt => {
       }
     },
 
-    babel: {
-      options: { presets: ['babel-preset-es2015'] },
+    browserify: {
+      options: {
+        transform: [
+          [ 'babelify', { presets: 'es2015' } ],
+        ],
+        browserifyOptions: {
+          debug: isDev
+        }
+      },
       dist: { files: { [ files.js[1] ]: files.js[0] } }
-    }
+    },
 
   })
 
   grunt.loadNpmTasks('grunt-postcss')
   grunt.loadNpmTasks('grunt-elm')
-  grunt.loadNpmTasks('grunt-babel')
+  grunt.loadNpmTasks('grunt-browserify')
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['postcss', 'elm', 'babel', 'watch'])
-  grunt.registerTask('build', ['postcss', 'elm', 'babel'])
+  grunt.registerTask('default', ['postcss', 'elm', 'browserify', 'watch'])
+  grunt.registerTask('build', ['postcss', 'elm', 'browserify'])
 }
 
