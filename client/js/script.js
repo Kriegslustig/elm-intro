@@ -1,4 +1,7 @@
+const hljs = require('highlight.js')
+
 const rExample = require('./lib/rExample')
+const normalSearch = require('./lib/search')
 
 const Elm = window.Elm
 
@@ -43,10 +46,12 @@ window.addEventListener('keydown', e => {
   presentation.ports.newSlides.subscribe(slides => {
     if(ran) return
     setTimeout(_ => {
+      hljs.initHighlighting();
       mapElems('searchExample', el => {
         Elm.embed(Elm.SearchExample, el)
       })
       mapElems('rExample', rExample)
+      mapElems('normalSearch', normalSearch)
     }, 100) // Wait for view to update
     ran = true
   })

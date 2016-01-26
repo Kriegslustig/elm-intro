@@ -13,17 +13,17 @@ import Task exposing (Task)
 import Lib.HackerNews as HackerNews
 
 type alias Model =
-  { output : List String
-  , inList : List String
+  { output : List HackerNews.NewsArticle
+  , inList : List HackerNews.NewsArticle
   }
 
 type Action = NoOp
   | NewQuery String
-  | NewInput (List String)
+  | NewInput (List HackerNews.NewsArticle)
 
-query : List String -> String -> List String
+query : List HackerNews.NewsArticle -> String -> List HackerNews.NewsArticle
 query list string =
-  List.filter (contains (toLower string) << toLower) list
+  List.filter (contains (toLower string) << toLower << .title) list
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
@@ -60,7 +60,7 @@ view address model =
     , p [] [ text <| "Resultate: " ++ toString (List.length model.output) ]
     , ul
       [ style [ ("width", "100%") ] ]
-      <| List.map (li [] << flip (::) [] << text) model.output
+      <| List.map (li [] << flip (::) [] << text << .title) model.output
     ]
 
 init : (Model, Effects Action)

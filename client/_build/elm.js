@@ -11522,12 +11522,24 @@ Elm.Lib.HackerNews.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Task = Elm.Task.make(_elm);
    var _op = {};
-   var decodeNewsList = $Json$Decode.list($Json$Decode.string);
+   var NewsArticle = F2(function (a,b) {    return {title: a,id: b};});
+   var decodeNewsArticle = A3($Json$Decode.object2,
+   NewsArticle,
+   $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],"title",$Json$Decode.string)
+                              ,A2($Json$Decode._op[":="],"text",$Json$Decode.string)
+                              ,A2($Json$Decode._op[":="],"type",$Json$Decode.string)])),
+   A2($Json$Decode._op[":="],"id",$Json$Decode.$int));
+   var decodeNewsList = $Json$Decode.list(decodeNewsArticle);
    var getNewsTask = A2($Http.get,decodeNewsList,"/hnposts");
    var getNews = function (a) {
       return $Effects.task(A2($Task.map,function (res) {    return a(A2($Result.withDefault,_U.list([]),res));},$Task.toResult(getNewsTask)));
    };
-   return _elm.Lib.HackerNews.values = {_op: _op,getNews: getNews,getNewsTask: getNewsTask,decodeNewsList: decodeNewsList};
+   return _elm.Lib.HackerNews.values = {_op: _op
+                                       ,NewsArticle: NewsArticle
+                                       ,getNews: getNews
+                                       ,getNewsTask: getNewsTask
+                                       ,decodeNewsArticle: decodeNewsArticle
+                                       ,decodeNewsList: decodeNewsList};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {
@@ -11782,7 +11794,11 @@ Elm.SearchExample.make = function (_elm) {
    $Task = Elm.Task.make(_elm);
    var _op = {};
    var query = F2(function (list,string) {
-      return A2($List.filter,function (_p0) {    return A2($String.contains,$String.toLower(string),$String.toLower(_p0));},list);
+      return A2($List.filter,
+      function (_p0) {
+         return A2($String.contains,$String.toLower(string),$String.toLower(function (_) {    return _.title;}(_p0)));
+      },
+      list);
    });
    var update = F2(function (action,model) {
       var _p1 = action;
@@ -11808,7 +11824,9 @@ Elm.SearchExample.make = function (_elm) {
               _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"}]))]),
               A2($List.map,
               function (_p3) {
-                 return A2($Html.li,_U.list([]),A3($Basics.flip,F2(function (x,y) {    return A2($List._op["::"],x,y);}),_U.list([]),$Html.text(_p3)));
+                 return A2($Html.li,
+                 _U.list([]),
+                 A3($Basics.flip,F2(function (x,y) {    return A2($List._op["::"],x,y);}),_U.list([]),$Html.text(function (_) {    return _.title;}(_p3))));
               },
               model.output))]));
    });

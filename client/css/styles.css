@@ -1,3 +1,5 @@
+@import '../../node_modules/highlight.js/styles/default.css';
+
 *, *:before, *:after {
   box-sizing: border-box;
 }
@@ -67,8 +69,10 @@ pre {
   border: solid 1px hsla(0, 0%, 0%, .1);
   padding: 1rem;
   min-width: 60vw;
+  max-width: calc(100vw - 4rem);
   margin-top: 0;
   line-height: 1.5rem;
+  overflow-x: auto;
 }
 
 article {
@@ -93,11 +97,13 @@ article {
 }
 
 .slide[data-title="Elm Reactor"] .slide__content,
-.slide[data-title="Reactive Suche"] .slide__content {
+.slide[data-title="Reactive Suche"] .slide__content,
+.slide[data-title="Normale Javascript Suche"] .slide__content {
   width: 100%;
 }
 
-.slide[data-title="Reactive Suche"] {
+.slide[data-title="Reactive Suche"],
+.slide[data-title="Normale Javascript Suche"] {
   display: inline-block;
 }
 
@@ -113,5 +119,10 @@ article {
   height: 100%;
   padding: 2rem;
   background-color: hsla(40, 20%, 90%, .98);
+}
+
+.searchComparison__cols {
+  float: left;
+  width: 50%;
 }
 
