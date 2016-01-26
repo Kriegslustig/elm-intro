@@ -17,7 +17,10 @@ getNews : (List NewsArticle -> a) -> Effects a
 getNews a =
   getNewsTask
     |> toResult
-    |> Task.map (\res -> a <| withDefault [] res)
+    |> Task.map (\res -> withDefault [] res
+      |> List.drop 4000
+      |> a
+    )
     |> Effects.task
 
 getNewsTask : Task Http.Error (List NewsArticle)

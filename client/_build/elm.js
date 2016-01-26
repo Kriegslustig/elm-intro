@@ -11532,7 +11532,11 @@ Elm.Lib.HackerNews.make = function (_elm) {
    var decodeNewsList = $Json$Decode.list(decodeNewsArticle);
    var getNewsTask = A2($Http.get,decodeNewsList,"/hnposts");
    var getNews = function (a) {
-      return $Effects.task(A2($Task.map,function (res) {    return a(A2($Result.withDefault,_U.list([]),res));},$Task.toResult(getNewsTask)));
+      return $Effects.task(A2($Task.map,
+      function (res) {
+         return a(A2($List.drop,4000,A2($Result.withDefault,_U.list([]),res)));
+      },
+      $Task.toResult(getNewsTask)));
    };
    return _elm.Lib.HackerNews.values = {_op: _op
                                        ,NewsArticle: NewsArticle
@@ -11663,13 +11667,14 @@ Elm.Presentation.make = function (_elm) {
    var SetSlide = function (a) {    return {ctor: "SetSlide",_0: a};};
    var storeInSig = A2($Signal.map,SetSlide,storeIn);
    var hashSignal = A2($Signal.map,function (_p1) {    return SetSlide(parseHash(_p1));},$History.hash);
+   var ToggleZoom = {ctor: "ToggleZoom"};
    var ToggleNotes = {ctor: "ToggleNotes"};
    var NextSlide = {ctor: "NextSlide"};
    var PrevSlide = {ctor: "PrevSlide"};
    var NoOp = {ctor: "NoOp"};
    var keySignal = A2($Signal.map,
    function (key) {
-      return _U.eq(key,39) ? NextSlide : _U.eq(key,37) ? PrevSlide : _U.eq(key,78) ? ToggleNotes : NoOp;
+      return _U.eq(key,39) ? NextSlide : _U.eq(key,37) ? PrevSlide : _U.eq(key,78) ? ToggleNotes : _U.eq(key,90) ? ToggleZoom : NoOp;
    },
    keyDown);
    var Slide = F3(function (a,b,c) {    return {title: a,content: b,notes: c};});
@@ -11679,7 +11684,7 @@ Elm.Presentation.make = function (_elm) {
    A2($Json$Decode._op[":="],"content",$Json$Decode.string),
    A2($Json$Decode._op[":="],"notes",$Json$Decode.string)));
    var getSlides = function (url) {    return $Effects.task(A2($Task.map,AddSlides,$Task.toMaybe(A2($Http.get,slidesDecoder,url))));};
-   var init = {ctor: "_Tuple2",_0: {slide: parseHash(initHashSignal),slides: _U.list([]),showNotes: false},_1: getSlides("/slides")};
+   var init = {ctor: "_Tuple2",_0: {slide: parseHash(initHashSignal),slides: _U.list([]),showNotes: false,zoom: 1},_1: getSlides("/slides")};
    var slideMailbox = $Signal.mailbox($Basics.fst(init).slide);
    var setSlideHash = function (slide) {
       return $Effects.batch(_U.list([$Effects.task(A2($Task.map,
@@ -11705,35 +11710,48 @@ Elm.Presentation.make = function (_elm) {
          case "AddSlides": return {ctor: "_Tuple2"
                                   ,_0: _U.update(model,{slides: A2($Basics._op["++"],model.slides,A2($Maybe.withDefault,_U.list([]),_p2._0))})
                                   ,_1: $Effects.none};
-         default: return {ctor: "_Tuple2",_0: _U.update(model,{showNotes: $Basics.not(model.showNotes)}),_1: $Effects.none};}
+         case "ToggleNotes": return {ctor: "_Tuple2",_0: _U.update(model,{showNotes: $Basics.not(model.showNotes)}),_1: $Effects.none};
+         default: return {ctor: "_Tuple2",_0: _U.update(model,{zoom: _U.cmp(model.zoom,1) < 0 ? 1 : 0.25}),_1: $Effects.none};}
    });
    var storeOut = Elm.Native.Port.make(_elm).outboundSignal("storeOut",function (v) {    return v;},slideMailbox.signal);
-   var Model = F3(function (a,b,c) {    return {slide: a,slides: b,showNotes: c};});
+   var Model = F4(function (a,b,c,d) {    return {slide: a,slides: b,showNotes: c,zoom: d};});
    _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
-   var renderSlide = F2(function (notes,slide) {
+   var renderSlide = F4(function (notes,zoom,i,slide) {
       return A2($Html.article,
       _U.list([$Html$Attributes.$class("slide")
               ,A2($Html$Attributes.attribute,"data-title",slide.title)
               ,$Html$Attributes.style(_U.list([A2(_op["=>"],"width","calc(100vw - 15px)")
                                               ,A2(_op["=>"],"min-height","100vh")
                                               ,A2(_op["=>"],"vertical-align","top")
-                                              ,A2(_op["=>"],"white-space","normal")]))]),
+                                              ,A2(_op["=>"],"white-space","normal")
+                                              ,A2(_op["=>"],"position","relative")]))]),
       _U.list([A2($Html.h1,_U.list([]),_U.list([$Html.text(slide.title)]))
               ,A2($Html.div,_U.list([$Html$Attributes.$class("slide__content")]),_U.list([$Markdown.toHtml(slide.content)]))
               ,A2($Html.div,
               _U.list([$Html$Attributes.$class("slide__notes"),$Html$Attributes.style(_U.list([A2(_op["=>"],"display",notes ? "block" : "none")]))]),
-              _U.list([$Markdown.toHtml(slide.notes)]))]));
+              _U.list([$Markdown.toHtml(slide.notes)]))
+              ,A2($Html.a,
+              _U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"width","100%")
+                                                      ,A2(_op["=>"],"height","100vh")
+                                                      ,A2(_op["=>"],"position","absolute")
+                                                      ,A2(_op["=>"],"top","0")
+                                                      ,A2(_op["=>"],"left","0")
+                                                      ,A2(_op["=>"],"display",zoom ? "block" : "none")]))
+                      ,$Html$Attributes.href(A2($Basics._op["++"],"#",$Basics.toString(i)))]),
+              _U.list([]))]));
    });
    var view = F2(function (address,model) {
+      var scale = A2($Basics._op["++"],"scale(",A2($Basics._op["++"],$Basics.toString(model.zoom),")"));
+      var translate = translateX($Basics.toFloat(model.slide) * 100 * -1);
       return A2($Html.div,
-      _U.list([]),
+      _U.list([$Html$Attributes.$class("deck__container"),$Html$Attributes.style(_U.list([A2(_op["=>"],"transform",scale)]))]),
       _U.list([A2($Html.div,
               _U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"position","absolute")
                                                       ,A2(_op["=>"],"white-space","nowrap")
-                                                      ,A2(_op["=>"],"transform",translateX($Basics.negate(model.slide * 100)))
+                                                      ,A2(_op["=>"],"transform",translate)
                                                       ,A2(_op["=>"],"height","100vh")]))
                       ,$Html$Attributes.$class("deck")]),
-              A2($List.map,renderSlide(model.showNotes),model.slides))
+              A2($List.indexedMap,A2(renderSlide,model.showNotes,_U.cmp(model.zoom,1) < 0),model.slides))
               ,A2($Html.div,
               _U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"position","fixed"),A2(_op["=>"],"bottom","25px"),A2(_op["=>"],"left","25px")]))
                       ,$Html$Attributes.$class("page")]),
@@ -11754,6 +11772,7 @@ Elm.Presentation.make = function (_elm) {
                                      ,PrevSlide: PrevSlide
                                      ,NextSlide: NextSlide
                                      ,ToggleNotes: ToggleNotes
+                                     ,ToggleZoom: ToggleZoom
                                      ,SetSlide: SetSlide
                                      ,AddSlides: AddSlides
                                      ,update: update

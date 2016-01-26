@@ -96,6 +96,12 @@ article {
   transition: transform .2s ease-in-out;
 }
 
+.deck__container {
+  width: 100%;
+  height: 100vh;
+  transition: transform .2s ease-in-out;
+}
+
 .slide[data-title="Elm Reactor"] .slide__content,
 .slide[data-title="Reactive Suche"] .slide__content,
 .slide[data-title="Normale Javascript Suche"] .slide__content {
