@@ -1,0 +1,40 @@
+.animate .rexample_chart__render,
+.animate .rexample_chart__render_text,
+.animate .rexample_chart__dom,
+.animate .rexample_chart__dom_text,
+.animate .rexample_chart__line1,
+.animate .rexample_chart__line2 {
+  animation:
+    1s ease-in-out 0s 30 blink,
+    1s ease-in-out 60s 30 blink;
+}
+
+.animate .rexample_chart__r,
+.animate .rexample_chart__r_text {
+  animation:
+    1s ease-in-out 0s 30 blink,
+    1s ease-in-out 30s 30 blink,
+    1s ease-in-out 60s 30 blink;
+}
+
+.animate .rexample_chart__line4,
+.animate .rexample_chart__line3,
+.animate .rexample_chart__input1,
+.animate .rexample_chart__input1_text,
+.animate .rexample_chart__input2,
+.animate .rexample_chart__input2_text {
+  animation: 1s ease-in-out 30s 30 blink;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+

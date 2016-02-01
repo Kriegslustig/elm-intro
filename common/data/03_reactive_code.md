@@ -1,17 +1,19 @@
 # Beispiel Reactive Code
 
 ```js
-// Einen initialen wert von number definieren
-r.number = 0
+r.n = 1
+r.m = 1
 
-// Rendert r.number im quadrat in einer reaktiven funktion
 r(function () {
-  render( r.number * r.number )
+  render( r.n * r.m )
 })
 
-// Hört auf imput events und updated dann r.number
-$('input').on('change', function (element) {
-  r.number = Number(element.value)
+$('.input1').on('input', function (element) {
+  r.n = Number(t.value)
+})
+
+$('.input2').on('input', function (element) {
+  r.m = Number(t.value)
 })
 ```
 
@@ -24,6 +26,8 @@ Hier sehr simples Beispiel das mit einem selbst geschriebenen _Reactive Micro Fr
 * Dann registriert es die variablen als abhängig von der Funktion
 
 Danach warten wir mit `setTimeout` eine Sekunde und ändern dann test. Jetzt triggert `Proxy.handler.set`. `r` hat sich beim letzten mal als es die obere Funktion (die `render`) ausführt gemerkt, dass die Funktion von `reactiveVar` abhängt. Jetzt geht `r` also den hash der Abhängigkeiten durch und sieht unsere Funktion. Also ruft `r` sie nochmals auf.
+
+[Die library ist auf Github und ziemlich gut dokumentiert.](https://gist.github.com/Kriegslustig/c638fde8d063471fa74f)
 
 </notes>
 

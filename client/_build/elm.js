@@ -11635,6 +11635,7 @@ Elm.Presentation.make = function (_elm) {
    $History = Elm.History.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
    $Http = Elm.Http.make(_elm),
    $Json$Decode = Elm.Json.Decode.make(_elm),
    $List = Elm.List.make(_elm),
@@ -11664,6 +11665,7 @@ Elm.Presentation.make = function (_elm) {
       return typeof v === "number" && isFinite(v) && Math.floor(v) === v ? v : _U.badPort("an integer",v);
    });
    var AddSlides = function (a) {    return {ctor: "AddSlides",_0: a};};
+   var SetSlideAndZoom = function (a) {    return {ctor: "SetSlideAndZoom",_0: a};};
    var SetSlide = function (a) {    return {ctor: "SetSlide",_0: a};};
    var storeInSig = A2($Signal.map,SetSlide,storeIn);
    var hashSignal = A2($Signal.map,function (_p1) {    return SetSlide(parseHash(_p1));},$History.hash);
@@ -11707,6 +11709,7 @@ Elm.Presentation.make = function (_elm) {
          case "NextSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: model.slide + 1}),_1: setSlideHash(model.slide + 1)};
          case "PrevSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: model.slide - 1}),_1: setSlideHash(model.slide - 1)};
          case "SetSlide": return {ctor: "_Tuple2",_0: _U.update(model,{slide: _p2._0}),_1: $Effects.none};
+         case "SetSlideAndZoom": return {ctor: "_Tuple2",_0: _U.update(model,{slide: _p2._0,zoom: 1}),_1: $Effects.none};
          case "AddSlides": return {ctor: "_Tuple2"
                                   ,_0: _U.update(model,{slides: A2($Basics._op["++"],model.slides,A2($Maybe.withDefault,_U.list([]),_p2._0))})
                                   ,_1: $Effects.none};
@@ -11716,7 +11719,7 @@ Elm.Presentation.make = function (_elm) {
    var storeOut = Elm.Native.Port.make(_elm).outboundSignal("storeOut",function (v) {    return v;},slideMailbox.signal);
    var Model = F4(function (a,b,c,d) {    return {slide: a,slides: b,showNotes: c,zoom: d};});
    _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
-   var renderSlide = F4(function (notes,zoom,i,slide) {
+   var renderSlide = F5(function (notes,zoom,address,i,slide) {
       return A2($Html.article,
       _U.list([$Html$Attributes.$class("slide")
               ,A2($Html$Attributes.attribute,"data-title",slide.title)
@@ -11737,7 +11740,8 @@ Elm.Presentation.make = function (_elm) {
                                                       ,A2(_op["=>"],"top","0")
                                                       ,A2(_op["=>"],"left","0")
                                                       ,A2(_op["=>"],"display",zoom ? "block" : "none")]))
-                      ,$Html$Attributes.href(A2($Basics._op["++"],"#",$Basics.toString(i)))]),
+                      ,A2($Html$Events.onClick,address,SetSlideAndZoom(i))
+                      ,$Html$Attributes.href(A2(F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),"#",$Basics.toString(i)))]),
               _U.list([]))]));
    });
    var view = F2(function (address,model) {
@@ -11751,7 +11755,7 @@ Elm.Presentation.make = function (_elm) {
                                                       ,A2(_op["=>"],"transform",translate)
                                                       ,A2(_op["=>"],"height","100vh")]))
                       ,$Html$Attributes.$class("deck")]),
-              A2($List.indexedMap,A2(renderSlide,model.showNotes,_U.cmp(model.zoom,1) < 0),model.slides))
+              A2($List.indexedMap,A3(renderSlide,model.showNotes,_U.cmp(model.zoom,1) < 0,address),model.slides))
               ,A2($Html.div,
               _U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"position","fixed"),A2(_op["=>"],"bottom","25px"),A2(_op["=>"],"left","25px")]))
                       ,$Html$Attributes.$class("page")]),
@@ -11774,6 +11778,7 @@ Elm.Presentation.make = function (_elm) {
                                      ,ToggleNotes: ToggleNotes
                                      ,ToggleZoom: ToggleZoom
                                      ,SetSlide: SetSlide
+                                     ,SetSlideAndZoom: SetSlideAndZoom
                                      ,AddSlides: AddSlides
                                      ,update: update
                                      ,setSlideHash: setSlideHash

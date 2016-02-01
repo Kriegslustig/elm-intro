@@ -22,6 +22,10 @@ const presentation = Elm.fullscreen(
   }
 )
 
+window.addEventListener('scroll', e => {
+  window.scroll(0, 0)
+})
+
 window.addEventListener('storage', e => {
   const slide = window.localStorage.slide
   if(!slide) return

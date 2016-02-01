@@ -7,7 +7,8 @@ module.exports = grunt => {
   const files = {
     css: [
       [ 'client/css/*.css' ],
-      'client/_build/bundle.css'
+      'client/_build/bundle.css',
+      [ 'client/css/**/*.css' ]
     ],
     elm: [
       [ 'client/elm/*.elm' ],
@@ -24,7 +25,7 @@ module.exports = grunt => {
   grunt.initConfig({
     watch: {
       css: {
-        files: files.css[0],
+        files: files.css[2],
         tasks: ['postcss']
       },
       elm: {

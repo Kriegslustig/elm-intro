@@ -7,7 +7,7 @@ import Maybe exposing (Maybe(Just, Nothing))
 import List exposing ((::))
 import Html exposing (Html, div, h1, article, fromElement, text, p, a)
 import Html.Attributes exposing (style, class, attribute, href)
-import Html.Events exposing (onKeyDown)
+import Html.Events exposing (onKeyDown, onClick)
 import Markdown
 import Effects exposing (Effects)
 import Http
@@ -39,6 +39,7 @@ type Action = NoOp
   | ToggleNotes
   | ToggleZoom
   | SetSlide Int
+  | SetSlideAndZoom Int
   | AddSlides (Maybe (List Slide))
 
 update : Action -> Model -> (Model, Effects Action)
@@ -66,6 +67,14 @@ update action model =
     SetSlide slide ->
       ( { model |
           slide = slide
+        }
+      , Effects.none
+      )
+
+    SetSlideAndZoom slide ->
+      ( { model |
+          slide = slide
+        , zoom = 1
         }
       , Effects.none
       )
@@ -156,8 +165,8 @@ hashSignal =
     (SetSlide << parseHash)
     History.hash
 
-renderSlide : Bool -> Bool -> Int -> Slide -> Html
-renderSlide notes zoom i slide =
+renderSlide : Bool -> Bool -> Address Action -> Int -> Slide -> Html
+renderSlide notes zoom address i slide =
   article
     [ class "slide"
     , attribute "data-title" slide.title
@@ -197,8 +206,10 @@ renderSlide notes zoom i slide =
              then "block"
              else "none"
         ]
+      , onClick address (SetSlideAndZoom i)
       , href
-        <| "#" ++ (toString i)
+        <| (++) "#"
+        <| toString i
       ]
       []
     ]
@@ -236,7 +247,7 @@ view address model =
             ]
         , class "deck"
         ]
-        <| List.indexedMap (renderSlide model.showNotes (model.zoom < 1)) model.slides
+        <| List.indexedMap (renderSlide model.showNotes (model.zoom < 1) address) model.slides
       , div
         [ style
           [ "position" => "fixed"

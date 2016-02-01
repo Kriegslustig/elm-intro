@@ -1,4 +1,6 @@
-@import '../../node_modules/highlight.js/styles/default.css';
+@import '../../node_modules/highlight.js/styles/default';
+@import 'lib/rexample_chart';
+@import 'lib/virtualdom';
 
 *, *:before, *:after {
   box-sizing: border-box;
@@ -35,6 +37,7 @@ input[type=text] {
   border-bottom: 1px solid hsl(0,0%,0%);
   width: 100%;
   font: inherit;
+  margin: .5rem 0;
 }
 
 h1,
@@ -50,7 +53,7 @@ article h2 {
 
 h1 {
   margin: .5rem 0 .7rem 0;
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: 400px;
 }
 
@@ -130,5 +133,34 @@ article {
 .searchComparison__cols {
   float: left;
   width: 50%;
+}
+
+.rexample_chart {
+  max-height: 80vh;
+}
+
+.rExample {
+  margin: .5rem;
+}
+
+.namebomb {
+  min-width: 90vw;
+  justify-content: center;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  display: flex;
+}
+
+.namebomb__image {
+  padding: 1rem;
+  max-width: 20vw;
+  min-width: 15vw;
+  display: block;
+}
+
+.namebomb__item {
+  width: 100%;
 }
 

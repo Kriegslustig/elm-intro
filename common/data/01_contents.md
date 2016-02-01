@@ -1,10 +1,17 @@
 # Contents
 
-* [Was ist Reactive Programming](#2)
-* [Reactive Programming und User Interfaces](#5)
+* [Reactive Programming und User Interfaces](#2)
+* [Was ist Reactive Programming](#4)
 * [Virtual DOM](#6)
-* [](#7)
+* [Elm](#7)
+    * []()
 
 <notes>
+
+* Elm
+  * Syntax
+  * Errors
+  * Side-effect
+
 </notes>
 
