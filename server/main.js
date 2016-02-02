@@ -3,6 +3,33 @@ const koaRouter = require('koa-router')
 const co = require('co')
 const getMarkdown = require('./lib/getMarkdown')
 
+const slides = [
+  'start'
+, 'contents'
+, 'elm'
+, 'architektur'
+, 'pro_con_spa'
+, 'reactive_programming'
+, 'reactive_code'
+, 'r_example'
+, 'reactive_interfaces'
+, 'virtual_dom'
+, 'functional_programming'
+, 'pure_functions'
+, 'strong_typing'
+, 'statically_checked'
+, 'safety'
+, 'search_elm'
+, 'elm_reactor'
+, 'prerendering'
+, 'reactive_frameworks'
+].reduce((m, s, i) => {
+  m[s] = i
+  return m
+}, {})
+
+console.log(slides)
+
 module.exports = (app, prefix) => {
   const router = koaRouter()
   router.get('/', function *(next) {
@@ -19,7 +46,19 @@ module.exports = (app, prefix) => {
     yield co(() => new Promise((res, rej) => {
       getMarkdown(`*`)
         .then(md => {
-          this.body = JSON.stringify(md)
+          this.body = JSON.stringify(
+            md.reduce(
+              (mem, slide, i) => {
+                const n = typeof slides[slide.name] === 'undefined'
+                  ? i
+                  : slides[slide.name]
+                mem[n] = slide
+                console.log(mem)
+                return mem
+              },
+              []
+            )
+          )
           this.status = 200
           res()
         })

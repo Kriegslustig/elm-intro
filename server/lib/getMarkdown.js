@@ -17,7 +17,8 @@ module.exports = pattern => {
             next(null, {
               content: res[2],
               title: res[1],
-              notes: res[4] || ""
+              notes: res[4] || "",
+              name: path.basename(file, '.md')
             })
           })
         },

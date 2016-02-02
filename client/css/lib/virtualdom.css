@@ -1,11 +1,11 @@
-:root {
-  --width: 10vw;
-  --space: 4vw;
-}
-
 .virtualdom {
   position: relative;
   width: 80vw;
+  height: 18rem;
+}
+
+.virtualdom__title {
+  background-image: linear-gradient(90deg, hsla(0, 0%, 100%, 0) 0%, hsla(0, 0%, 100%, 1) 20%, hsla(0, 0%, 100%, 1) 80%, hsla(0, 0%, 100%, 0) 100%);
 }
 
 .virtualdom__col {
@@ -34,6 +34,33 @@
   width: 100%;
   background-color: hsl(30, 40%, 100%);
   border: 4px solid hsl(30, 40%, 80%);
+}
+
+.virtualdom__col--1 .virtualdom__brick {
+  background-color: hsl(60, 40%, 100%);
+  border: 4px solid hsl(60, 40%, 80%);
+}
+
+.virtualdom__col--1 .virtualdom__brick--colorful {
+  background-color: hsl(60, 40%, 80%);
+}
+
+.virtualdom__col--2 .virtualdom__brick {
+  background-color: hsl(60, 40%, 100%);
+  border: 4px solid hsl(120, 40%, 80%);
+}
+
+.virtualdom__col--2 .virtualdom__brick--colorful {
+  background-color: hsl(120, 40%, 80%);
+}
+
+.virtualdom__col--3 .virtualdom__brick {
+  background-color: hsl(60, 40%, 100%);
+  border: 4px solid hsl(200, 40%, 80%);
+}
+
+.virtualdom__col--3 .virtualdom__brick--colorful {
+  background-color: hsl(200, 40%, 80%);
 }
 
 .virtualdom__brick--white {

@@ -19,12 +19,17 @@ strong {
 html {
   font-family: 'Input Sans', 'Courier New';
   overflow-x: hidden;
-  font-size: 20px;
+  font-size: 25px;
 }
 
 body {
   margin: 0;
   padding: 0;
+}
+
+svg {
+  max-height: 80vh;
+  min-width: 50vw;
 }
 
 iframe {
@@ -53,12 +58,12 @@ article h2 {
 
 h1 {
   margin: .5rem 0 .7rem 0;
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 400px;
 }
 
 video {
-  min-width: 90vw;
+  max-height: 75vh;
   width: 100%;
 }
 
@@ -116,6 +121,10 @@ article {
   display: inline-block;
 }
 
+.slide[data-title="Reactive Programming und User Interfaces"] h1 {
+  font-size: 2rem;
+}
+
 .slide__content {
   width: auto;
 }
@@ -125,7 +134,7 @@ article {
   top: 0;
   right: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   padding: 2rem;
   background-color: hsla(40, 20%, 90%, .98);
 }

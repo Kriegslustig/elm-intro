@@ -2,13 +2,13 @@
 
 <svg version="1.1" onclick="this.setAttribute('class', this.getAttribute('class') + ' animate')" id="test" class="rexample_chart" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" style="enable-background:new 0 0 500 500;" xml:space="preserve">
   <style type="text/css">
-    .st0{
+    .rexample_chart .st0{
       fill:none;
       stroke:#000;
       stroke-width:7;
       stroke-miterlimit:10;
     }
-    .st1{
+    rexample_chart.st1{
       fill:#000;
       font-family:Input;
       font-size:24px;

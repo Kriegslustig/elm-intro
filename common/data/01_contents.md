@@ -4,14 +4,8 @@
 * [Was ist Reactive Programming](#4)
 * [Virtual DOM](#6)
 * [Elm](#7)
-    * []()
 
 <notes>
-
-* Elm
-  * Syntax
-  * Errors
-  * Side-effect
 
 </notes>
 
