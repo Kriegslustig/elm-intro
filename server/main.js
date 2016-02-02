@@ -21,14 +21,11 @@ const slides = [
 , 'safety'
 , 'search_elm'
 , 'elm_reactor'
-, 'prerendering'
 , 'reactive_frameworks'
 ].reduce((m, s, i) => {
   m[s] = i
   return m
 }, {})
-
-console.log(slides)
 
 module.exports = (app, prefix) => {
   const router = koaRouter()
