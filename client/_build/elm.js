@@ -11685,7 +11685,11 @@ Elm.Presentation.make = function (_elm) {
    A2($Json$Decode._op[":="],"title",$Json$Decode.string),
    A2($Json$Decode._op[":="],"content",$Json$Decode.string),
    A2($Json$Decode._op[":="],"notes",$Json$Decode.string)));
-   var getSlides = function (url) {    return $Effects.task(A2($Task.map,AddSlides,$Task.toMaybe(A2($Http.get,slidesDecoder,url))));};
+   var getSlides = function (url) {
+      return $Effects.task(A2($Task.map,
+      AddSlides,
+      $Task.toMaybe(A2($Task.onError,A2($Http.get,slidesDecoder,url),function (e) {    var e = A2($Debug.log,"",e);return $Task.succeed(_U.list([]));}))));
+   };
    var init = {ctor: "_Tuple2",_0: {slide: parseHash(initHashSignal),slides: _U.list([]),showNotes: false,zoom: 1},_1: getSlides("/slides")};
    var slideMailbox = $Signal.mailbox($Basics.fst(init).slide);
    var setSlideHash = function (slide) {

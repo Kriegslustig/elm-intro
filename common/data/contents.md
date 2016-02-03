@@ -1,40 +1,13 @@
 # Contents
 
-* [Reactive Programming und User Interfaces](#2)
-* [Was ist Reactive Programming](#4)
-* [Virtual DOM](#6)
-* [Elm](#7)
+* [Elm](#2)
+* [Reactive Programming](#3)
+* [r.js Beispiel](#4)
+* [Virtual DOM](#7)
+* [Funktionale Programmierung](#8)
+* [SPA Architektur](#18)
+* [Endfolie](#20)
 
 <notes>
-
-* start
-* contents
-
-* elm
-
-* Highlevel view
-
-* reactive_programming
-* reactive_code
-* r_example
-* rgraphic
-
-* reactive_interfaces
-
-* virtual_dom
-
-* functional_programming
-* pure_functions
-
-* Elm Syntax
-* Stark Typisiert
-* Statisch überprüfte Typen
-
-* Prerendering
-
-* search_elm
-* elm_reactor
-* reactive_frameworks
-
 </notes>
 

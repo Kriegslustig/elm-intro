@@ -1,6 +1,6 @@
 # Pure Funktionen
 
-## Funktion mit Side-Effects
+## Schmutzige Funktion
 
 ```js
 function stupid (n) {

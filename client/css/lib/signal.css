@@ -1,0 +1,24 @@
+.signal {
+  margin: 2rem auto;
+  width: 10vh;
+  height: 10vh;
+  border-radius: 10vw;
+  background-color: hsl(10, 50%, 40%);
+  animation: signal 3s linear 0s infinite alternate;
+}
+
+@keyframes signal {
+  55% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  60% {
+    transform: scale(.8);
+    opacity: .5;
+  }
+  65% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+

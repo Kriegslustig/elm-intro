@@ -1,7 +1,7 @@
 # Elm
 
-* Pur funktional
 * Reactive
+* Pur funktional
 * Stark statisch typisiert
 * **Sicher**
 * Compiler `Elm -> JS`

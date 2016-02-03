@@ -7,8 +7,6 @@ const slides = [
   'start'
 , 'contents'
 , 'elm'
-, 'architektur'
-, 'pro_con_spa'
 , 'reactive_programming'
 , 'reactive_code'
 , 'r_example'
@@ -18,10 +16,16 @@ const slides = [
 , 'pure_functions'
 , 'strong_typing'
 , 'statically_checked'
-, 'safety'
-, 'search_elm'
+, 'elm_signals'
+, 'elm_errors'
 , 'elm_reactor'
+, 'eat'
+, 'whatwhywhatisthis'
+, 'architektur'
+, 'pro_con_spa'
 , 'reactive_frameworks'
+, 'credits'
+, 'search_elm'
 ].reduce((m, s, i) => {
   m[s] = i
   return m
@@ -43,19 +47,16 @@ module.exports = (app, prefix) => {
     yield co(() => new Promise((res, rej) => {
       getMarkdown(`*`)
         .then(md => {
-          this.body = JSON.stringify(
-            md.reduce(
+          const allslides = md.reduce(
               (mem, slide, i) => {
-                const n = typeof slides[slide.name] === 'undefined'
-                  ? i
-                  : slides[slide.name]
+                if(typeof slides[slide.name] === 'undefined') return mem
+                const n = slides[slide.name]
                 mem[n] = slide
-                console.log(mem)
                 return mem
               },
               []
             )
-          )
+          this.body = JSON.stringify(allslides)
           this.status = 200
           res()
         })

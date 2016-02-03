@@ -121,7 +121,10 @@ storeInSig =
 
 getSlides : String -> Effects Action
 getSlides url =
-  Http.get slidesDecoder url
+  Http.get slidesDecoder url `Task.onError` (\e ->
+      let e = Debug.log "" e
+      in Task.succeed []
+    )
     |> Task.toMaybe
     |> Task.map AddSlides
     |> Effects.task
