@@ -7,17 +7,17 @@ module.exports = grunt => {
   const files = {
     css: [
       [ 'client/css/*.css' ],
-      'client/_build/bundle.css',
+      'client/assets/elm/bundle.css',
       [ 'client/css/**/*.css' ]
     ],
     elm: [
       [ 'client/elm/*.elm' ],
-      'client/_build/elm.js',
+      'client/assets/elm/elm.js',
       [ 'client/elm/**/*.elm' ]
     ],
     js: [
       [ 'client/js/*.js' ],
-      'client/_build/bundle.js',
+      'client/assets/elm/bundle.js',
       [ 'client/js/**/*.js' ]
     ]
   }

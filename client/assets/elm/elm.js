@@ -11732,7 +11732,7 @@ Elm.Presentation.make = function (_elm) {
                                               ,A2(_op["=>"],"vertical-align","top")
                                               ,A2(_op["=>"],"white-space","normal")
                                               ,A2(_op["=>"],"position","relative")]))]),
-      _U.list([A2($Html.h1,_U.list([]),_U.list([$Html.text(slide.title)]))
+      _U.list([$Markdown.toHtml(A2($Basics._op["++"],"#",slide.title))
               ,A2($Html.div,_U.list([$Html$Attributes.$class("slide__content")]),_U.list([$Markdown.toHtml(slide.content)]))
               ,A2($Html.div,
               _U.list([$Html$Attributes.$class("slide__notes"),$Html$Attributes.style(_U.list([A2(_op["=>"],"display",notes ? "block" : "none")]))]),

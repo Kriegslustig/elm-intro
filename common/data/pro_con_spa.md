@@ -15,6 +15,8 @@
 
 <notes>
 
+Eine solche Architektur setzt eines voraus; ein funktionierendes build-system. Mit Node.js lässt sich so etwas sehr leicht, cross-plattform compatibel umsetzen. Das würde für uns bedeuten, SASS lokal zu kompilieren.
+
 In dieser Architektur wir also eigentlich alles durch JavaScript gerendered und die Informationen werden aus der **Database über JSON APIs** geholt. Das hat einige Vorteile gegenüber einer traditionelleren Architektur.
 
 1. **Server-Side Caching** - Die drei Files die zuerst ausgeliefert werden können perfekt gecached werden. Die APIs können einfach hinter einen Mem-Cache gestellt werden. Dieses Caching kann man extrem gut fine tunen, da man eine saubere Trennung der verschiedenen dynamischen Inhalte bekommt.

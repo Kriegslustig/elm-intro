@@ -181,9 +181,7 @@ renderSlide notes zoom address i slide =
       , "position" => "relative"
       ]
     ]
-    [ h1
-      [ ]
-      [ text slide.title ]
+    [ Markdown.toHtml ("#" ++ slide.title)
     , div
       [ class "slide__content" ]
       [ Markdown.toHtml slide.content ]

@@ -2,7 +2,7 @@
 
 <notes>
 
-Funktionale Programmierung heisst nicht mehr als programmieren mit Funktionen. Es gibt keine Klassen. Ich kann das nicht besser erklären als [Norman Ramsey](https://stackoverflow.com/users/41661/norman-ramsey) in [seiner Antwort](http://stackoverflow.com/a/2079678/4386702) auf [diese Stackoverflow Frage](https://stackoverflow.com/questions/2078978/functional-programming-vs-object-oriented-programming).
+Funktionale Programmierung heisst nicht mehr als **programmieren mit Funktionen**. Es gibt **keine Klassen**. Ich kann das nicht besser erklären als [Norman Ramsey](https://stackoverflow.com/users/41661/norman-ramsey) in [seiner Antwort](http://stackoverflow.com/a/2079678/4386702) auf [diese Stackoverflow Frage](https://stackoverflow.com/questions/2078978/functional-programming-vs-object-oriented-programming).
 
 _Norman Ramsey_:
 

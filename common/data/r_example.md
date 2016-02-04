@@ -1,4 +1,4 @@
-# R Beispiel
+# `r.js` Beispiel
 
 <div class="rExample">
   <div></div>

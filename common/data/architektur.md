@@ -48,9 +48,9 @@
 
 <notes>
 
-Diese Grafik zeigt das die Kommunikation von Server und Client in einer einfachen Elm App. Das Build System compiliert die Elm files zu JS und möglicherweise irgendwelche SASS files zu CSS. Diese Architektur wird oft SPA (Single Page App) genannt.
+Diese Grafik zeigt das die **Kommunikation von Server und Client** in einer einfachen Elm-SPA. Das **Build System** compiliert die Elm files zu JS und möglicherweise irgendwelche SASS files zu CSS. Diese Architektur wird oft SPA (Single Page App) genannt.
 
-Bei einem Request werden erst drei Files an den Client gesendet; HTML, CSS und JS. Das HTML file hat keinen Inhalt bis auf die Links zu den CSS und JS files. Die drei Files veränderen sich grundsätzlich nie und können unendlich lange gecached werden. Nach dem laden dieser Files führt der Browser das JS aus. Dieser Code rendert zuerst die Struktur des Dokuments (z.b. header, footer, eigentlich alles immer gleich bleibt). Danach macht es einen Request an `/posts` und rendert diese dann.
+Bei einem Request werden erst drei Files an den Client gesendet; **HTML, CSS und JS**. Das HTML file hat keinen Inhalt bis auf die Links zu den CSS und JS files. Die drei Files veränderen sich grundsätzlich nie und können unendlich lange gecached werden. Nach dem laden dieser Files führt der Browser das JS aus. Dieser Code rendert zuerst die Struktur des Dokuments (z.b. header, footer, eigentlich alles immer gleich bleibt). Danach macht es einen Request an `/posts` und rendert diese dann.
 
 </notes>
 
