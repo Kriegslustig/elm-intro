@@ -32,7 +32,7 @@ const slides = [
 }, {})
 
 module.exports = (app, prefix) => {
-  const router = koaRouter()
+  const router = koaRouter({ prefix })
   router.get('/', function *(next) {
     yield co(() => new Promise((res, rej) => {
       fs.readFile(`${__dirname}/../common/index.html`, { encoding: 'utf8' }, (err, data) => {

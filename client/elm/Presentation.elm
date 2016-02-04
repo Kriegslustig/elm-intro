@@ -226,7 +226,7 @@ init =
     , showNotes = False
     , zoom = 1
     }
-  , getSlides "/slides"
+  , getSlides "elm/slides"
   )
 
 view : Address Action -> Model -> Html

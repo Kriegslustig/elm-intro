@@ -25,7 +25,7 @@ getNews a =
 
 getNewsTask : Task Http.Error (List NewsArticle)
 getNewsTask =
-  Http.get decodeNewsList "/hnposts"
+  Http.get decodeNewsList "elm/hnposts"
 
 decodeNewsArticle : Json.Decode.Decoder NewsArticle
 decodeNewsArticle =

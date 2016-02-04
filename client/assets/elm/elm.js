@@ -11530,7 +11530,7 @@ Elm.Lib.HackerNews.make = function (_elm) {
                               ,A2($Json$Decode._op[":="],"type",$Json$Decode.string)])),
    A2($Json$Decode._op[":="],"id",$Json$Decode.$int));
    var decodeNewsList = $Json$Decode.list(decodeNewsArticle);
-   var getNewsTask = A2($Http.get,decodeNewsList,"/hnposts");
+   var getNewsTask = A2($Http.get,decodeNewsList,"elm/hnposts");
    var getNews = function (a) {
       return $Effects.task(A2($Task.map,
       function (res) {
@@ -11690,7 +11690,7 @@ Elm.Presentation.make = function (_elm) {
       AddSlides,
       $Task.toMaybe(A2($Task.onError,A2($Http.get,slidesDecoder,url),function (e) {    var e = A2($Debug.log,"",e);return $Task.succeed(_U.list([]));}))));
    };
-   var init = {ctor: "_Tuple2",_0: {slide: parseHash(initHashSignal),slides: _U.list([]),showNotes: false,zoom: 1},_1: getSlides("/slides")};
+   var init = {ctor: "_Tuple2",_0: {slide: parseHash(initHashSignal),slides: _U.list([]),showNotes: false,zoom: 1},_1: getSlides("elm/slides")};
    var slideMailbox = $Signal.mailbox($Basics.fst(init).slide);
    var setSlideHash = function (slide) {
       return $Effects.batch(_U.list([$Effects.task(A2($Task.map,
