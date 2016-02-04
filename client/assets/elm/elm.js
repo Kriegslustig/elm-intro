@@ -11574,7 +11574,7 @@ Elm.Main.make = function (_elm) {
       var _p4 = _p1._1;
       var dir = function () {    var _p2 = mario.dir;if (_p2.ctor === "Left") {    return "left";} else {    return "right";}}();
       var verb = _U.cmp(mario.y,0) > 0 ? "jump" : !_U.eq(mario.vx,0) ? "walk" : "stand";
-      var src = A2($Basics._op["++"],"http://localhost:3000/img/",A2($Basics._op["++"],verb,A2($Basics._op["++"],"_",A2($Basics._op["++"],dir,".gif"))));
+      var src = A2($Basics._op["++"],"http://localhost:3000/elm/img/",A2($Basics._op["++"],verb,A2($Basics._op["++"],"_",A2($Basics._op["++"],dir,".gif"))));
       var marioImage = A3($Graphics$Element.image,35,35,src);
       var _p3 = {ctor: "_Tuple2",_0: $Basics.toFloat(_p5),_1: $Basics.toFloat(_p4)};
       var w = _p3._0;

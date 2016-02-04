@@ -107,7 +107,7 @@ view (w',h') mario =
         Right -> "right"
 
     src =
-      "http://localhost:3000/img/"++ verb ++ "_" ++ dir ++ ".gif"
+      "http://localhost:3000/elm/img/"++ verb ++ "_" ++ dir ++ ".gif"
 
     marioImage =
       image 35 35 src

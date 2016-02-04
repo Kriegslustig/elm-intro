@@ -2,25 +2,25 @@
 
 <div class="namebomb">
   <a href="http://cycle.js.org/" class="namebomb__image">
-    <img class="namebomb__item" src="/img/cyclejs.svg" alt="">
+    <img class="namebomb__item" src="/elm/img/cyclejs.svg" alt="">
   </a>
   <a href="http://elm-lang.org/" class="namebomb__image">
-    <img class="namebomb__item" src="/img/elm.svg" alt="">
+    <img class="namebomb__item" src="/elm/img/elm.svg" alt="">
   </a>
   <a href="https://www.meteor.com/" class="namebomb__image">
-    <img class="namebomb__item" src="/img/meteor-logo.png" alt="">
+    <img class="namebomb__item" src="/elm/img/meteor-logo.png" alt="">
   </a>
   <a href="https://facebook.github.io/react/" class="namebomb__image">
-    <img class="namebomb__item" src="/img/react.svg" alt="">
+    <img class="namebomb__item" src="/elm/img/react.svg" alt="">
   </a>
   <a href="https://angular.io/" class="namebomb__image">
-    <img class="namebomb__item" src="/img/angular.png" alt="">
+    <img class="namebomb__item" src="/elm/img/angular.png" alt="">
   </a>
   <a href="http://riotjs.com/" class="namebomb__image">
-    <img class="namebomb__item" src="/img/riot.png" alt="">
+    <img class="namebomb__item" src="/elm/img/riot.png" alt="">
   </a>
   <a href="http://vuejs.org/" class="namebomb__image">
-    <img class="namebomb__item" src="/img/vue.png" alt="">
+    <img class="namebomb__item" src="/elm/img/vue.png" alt="">
   </a>
 </div>
 
