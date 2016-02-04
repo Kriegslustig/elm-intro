@@ -1,6 +1,6 @@
 # Virtual DOM
 
-<div class="virtualdom">
+<div class="virtualdom" onclick="this.setAttribute('class', this.getAttribute('class') + ' active')" >
   <div class="virtualdom__col virtualdom__col--1">
     <h2 class="virtualdom__title">DOM</h2>
     <div class="virtualdom__brick"></div>
