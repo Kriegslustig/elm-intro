@@ -104,7 +104,7 @@ setSlideHash : Int -> Effects Action
 setSlideHash slide =
   Effects.batch
     [ toString slide
-      |> (++) "/#"
+      |> (++) "/elm#"
       |> History.setPath
       |> Task.toResult
       |> Task.map (\res -> NoOp)
@@ -209,7 +209,7 @@ renderSlide notes zoom address i slide =
         ]
       , onClick address (SetSlideAndZoom i)
       , href
-        <| (++) "#"
+        <| (++) "/elm#"
         <| toString i
       ]
       []

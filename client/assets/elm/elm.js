@@ -11698,7 +11698,7 @@ Elm.Presentation.make = function (_elm) {
                                        return NoOp;
                                     },
                                     $Task.toResult($History.setPath(A2(F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
-                                    "/#",
+                                    "/elm#",
                                     $Basics.toString(slide))))))
                                     ,$Effects.task(A2($Task.map,
                                     function (res) {
@@ -11745,7 +11745,7 @@ Elm.Presentation.make = function (_elm) {
                                                       ,A2(_op["=>"],"left","0")
                                                       ,A2(_op["=>"],"display",zoom ? "block" : "none")]))
                       ,A2($Html$Events.onClick,address,SetSlideAndZoom(i))
-                      ,$Html$Attributes.href(A2(F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),"#",$Basics.toString(i)))]),
+                      ,$Html$Attributes.href(A2(F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),"/elm#",$Basics.toString(i)))]),
               _U.list([]))]));
    });
    var view = F2(function (address,model) {
